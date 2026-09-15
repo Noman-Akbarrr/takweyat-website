@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Container } from "./Container";
 
 const navigation = [
@@ -84,10 +85,15 @@ export function Navigation() {
         <Container>
           <nav className="flex items-center justify-between h-20">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2">
-              <span className="text-2xl font-bold text-white">
-                Takweyat
-              </span>
+            <Link href="/" className="flex items-center">
+              <Image
+                src="/logo.png"
+                alt="Takweyat Foundation"
+                width={180}
+                height={50}
+                className="h-12 w-auto"
+                priority
+              />
             </Link>
 
             {/* Desktop Navigation */}

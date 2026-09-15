@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Container } from "./Container";
 
 const footerLinks = {
@@ -43,10 +44,14 @@ export function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
             {/* Brand Column */}
             <div>
-              <Link href="/" className="flex items-center gap-2 mb-4">
-                <span className="text-2xl font-bold text-white">
-                  Takweyat
-                </span>
+              <Link href="/" className="flex items-center mb-4">
+                <Image
+                  src="/logo.png"
+                  alt="Takweyat Foundation"
+                  width={180}
+                  height={50}
+                  className="h-12 w-auto"
+                />
               </Link>
               <p className="text-white/50 text-sm leading-relaxed mb-6">
                 Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita.
