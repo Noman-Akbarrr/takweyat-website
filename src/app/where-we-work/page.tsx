@@ -1,12 +1,12 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { Container, Section, SectionHeading, DonationCTA, Breadcrumbs } from "@/components/ui";
+import { Container, Section, SectionHeading, DonationCTA } from "@/components/ui";
 import { countries } from "@/lib/data/countries";
 import { generateBreadcrumbSchema } from "@/lib/seo/schema";
 
 export const metadata: Metadata = {
   title: "Where We Work",
-  description: "Takweyat Foundation operates across 8 countries, bringing education, food, healthcare, and hope to communities in need.",
+  description: "Takweyat Foundation operates across 5 countries, bringing education, food, healthcare, and hope to communities in need.",
 };
 
 export default function WhereWeWorkPage() {
@@ -21,23 +21,26 @@ export default function WhereWeWorkPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-primary-dark via-primary to-primary-light py-24">
-        <Container>
-          <div className="max-w-3xl">
-            <Breadcrumbs items={[{ label: "Where We Work" }]} />
-            <p className="text-text-inverse/80 font-semibold uppercase tracking-wider mb-4">
-              Where We Work
-            </p>
-            <h1 className="text-4xl md:text-5xl font-bold text-text-inverse">
-              8 Countries. One Mission.
-            </h1>
-            <p className="mt-6 text-lg text-text-inverse/80 leading-relaxed">
-              Takweyat Foundation operates across 8 countries, working with local communities to provide education, food, healthcare, and hope where it&apos;s needed most.
-            </p>
-          </div>
-        </Container>
-      </section>
+
+      {/* Page Header */}
+      <div className="page-header">
+        <div className="text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 animate-slide-in-down">
+            Where We Work
+          </h1>
+          <nav aria-label="breadcrumb" className="animate-slide-in-down">
+            <ol className="flex justify-center gap-2 text-sm">
+              <li>
+                <Link href="/" className="text-white hover:text-primary transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li className="text-white/50">/</li>
+              <li className="text-primary">Where We Work</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
 
       {/* Stats */}
       <Section className="py-12 bg-surface border-b border-border-light">
@@ -59,33 +62,26 @@ export default function WhereWeWorkPage() {
         </Container>
       </Section>
 
-      {/* World Map Placeholder */}
-      <Section>
+      {/* Countries Grid */}
+      <Section className="py-20">
         <Container>
-          <div className="bg-surface-elevated rounded-2xl p-8 md:p-16 text-center mb-16">
-            <div className="aspect-[2/1] bg-gradient-to-br from-primary/5 to-primary/10 rounded-xl flex items-center justify-center">
-              <div>
-                <div className="text-6xl mb-4">🌍</div>
-                <p className="text-text-muted">Interactive World Map</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Countries Grid */}
+          <SectionHeading
+            badge="Our Locations"
+            title="5 Countries. One Mission."
+            subtitle="Takweyat Foundation operates across 5 countries, working with local communities to provide education, food, healthcare, and hope where it's needed most."
+          />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {countries.map((country) => (
               <Link
                 key={country.slug}
                 href={`/where-we-work/${country.slug}`}
-                className="group bg-surface rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-border-light"
+                className="group bg-white rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300"
               >
-                {/* Map Marker */}
                 <div className="h-40 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
                   <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                     <div className="w-4 h-4 bg-white rounded-full" />
                   </div>
                 </div>
-
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-text-primary group-hover:text-primary transition-colors">
                     {country.name}
@@ -93,15 +89,6 @@ export default function WhereWeWorkPage() {
                   <p className="mt-2 text-text-secondary text-sm line-clamp-2">
                     {country.description}
                   </p>
-
-                  {country.impact.projects > 0 && (
-                    <div className="mt-4 flex gap-4 text-xs text-text-muted">
-                      <span>{country.impact.projects} projects</span>
-                      <span>·</span>
-                      <span>{country.impact.people.toLocaleString()} people</span>
-                    </div>
-                  )}
-
                   <div className="mt-4 text-primary font-semibold text-sm flex items-center gap-2">
                     Explore
                     <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -115,12 +102,7 @@ export default function WhereWeWorkPage() {
         </Container>
       </Section>
 
-      <DonationCTA
-        title="Support Our Work Around the World"
-        description="Your donation helps us maintain our presence in 8 countries, ensuring that communities receive the support they need."
-        buttonText="Donate Now"
-        buttonHref="/get-involved/donate"
-      />
+      <DonationCTA />
     </>
   );
 }

@@ -247,88 +247,29 @@ function DonateForm() {
                   <span className="font-semibold text-primary">{selectedCauseData?.label}</span>
                 </p>
 
-                <form onSubmit={handleSubmit} className="bg-surface rounded-2xl p-8 border border-border-light">
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-text-primary mb-1">
-                        Full Name
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full px-4 py-3 border border-border-light rounded-xl focus:outline-none focus:border-primary"
-                        placeholder="Your name"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-text-primary mb-1">
-                        Email
-                      </label>
-                      <input
-                        type="email"
-                        required
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full px-4 py-3 border border-border-light rounded-xl focus:outline-none focus:border-primary"
-                        placeholder="your@email.com"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-text-primary mb-1">
-                        Card Number
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={formData.cardNumber}
-                        onChange={(e) => setFormData({ ...formData, cardNumber: e.target.value })}
-                        className="w-full px-4 py-3 border border-border-light rounded-xl focus:outline-none focus:border-primary"
-                        placeholder="1234 5678 9012 3456"
-                      />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-text-primary mb-1">
-                          Expiry
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={formData.expiry}
-                          onChange={(e) => setFormData({ ...formData, expiry: e.target.value })}
-                          className="w-full px-4 py-3 border border-border-light rounded-xl focus:outline-none focus:border-primary"
-                          placeholder="MM/YY"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-text-primary mb-1">
-                          CVC
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={formData.cvc}
-                          onChange={(e) => setFormData({ ...formData, cvc: e.target.value })}
-                          className="w-full px-4 py-3 border border-border-light rounded-xl focus:outline-none focus:border-primary"
-                          placeholder="123"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="w-full mt-6 py-4 bg-action text-text-inverse font-bold text-lg rounded-xl hover:bg-action-dark transition-colors"
-                  >
-                    Complete Donation — ${selectedAmount}
-                  </button>
-
-                  <p className="mt-4 text-center text-xs text-text-muted">
-                    🔒 Secure payment powered by Stripe
+                <div className="bg-surface rounded-2xl p-8 border border-border-light text-center">
+                  <div className="text-4xl mb-4">💝</div>
+                  <h3 className="text-xl font-bold text-text-primary mb-4">
+                    Donate via WhatsApp
+                  </h3>
+                  <p className="text-text-secondary mb-6">
+                    To make a donation, please contact us directly via WhatsApp. We&apos;ll guide you through the process and ensure your donation reaches those in need.
                   </p>
-                </form>
+                  <a
+                    href="https://wa.me/923145217958"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center px-8 py-4 bg-[#25D366] text-white font-bold text-lg rounded-xl hover:bg-[#128C7E] transition-colors"
+                  >
+                    Donate via WhatsApp
+                  </a>
+                  <p className="mt-4 text-xs text-text-muted">
+                    Or call us at{" "}
+                    <a href="tel:+923145217958" className="text-primary hover:underline">
+                      +92 314 5217958
+                    </a>
+                  </p>
+                </div>
 
                 <button
                   onClick={() => setStep(3)}
@@ -348,19 +289,31 @@ function DonateForm() {
 export default function DonatePage() {
   return (
     <>
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-primary-dark via-primary to-primary-light py-16">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-text-inverse">
-              Make a Donation
-            </h1>
-            <p className="mt-4 text-lg text-text-inverse/80">
-              Your generosity creates real change. Choose where your donation goes.
-            </p>
-          </div>
-        </Container>
-      </section>
+      {/* Page Header */}
+      <div className="page-header">
+        <div className="text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 animate-slide-in-down">
+            Make a Donation
+          </h1>
+          <nav aria-label="breadcrumb" className="animate-slide-in-down">
+            <ol className="flex justify-center gap-2 text-sm">
+              <li>
+                <Link href="/" className="text-white hover:text-primary transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li className="text-white/50">/</li>
+              <li>
+                <Link href="/get-involved" className="text-white hover:text-primary transition-colors">
+                  Get Involved
+                </Link>
+              </li>
+              <li className="text-white/50">/</li>
+              <li className="text-primary">Donate</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
 
       <Suspense fallback={
         <Section>

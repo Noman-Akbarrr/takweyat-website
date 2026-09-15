@@ -23,7 +23,7 @@ export const stories = [
       "At Takweyat, we believe that a hot meal is more than just food—it's dignity, hope, and a step toward a better society. Every day, countless people go to bed hungry, and we are working to change that.",
       "Our Hunger Relief & Food Distribution program operates across multiple countries, providing daily meal programs, organizing Ramadan iftars, and setting up dastarkhawans that serve thousands of meals to those in need.",
       "From emergency food packages during crises to long-term food security programs, we address both the immediate and root causes of hunger. We work with local communities to create sustainable food solutions.",
-      "Last year alone, we served over 100,000 hot meals, distributed thousands of food packages, and organized iftars that brought communities together in shared meals and shared hope.",
+      "Last year alone, we served over 1,000 hot meals, distributed hundreds of food packages, and organized iftars that brought communities together in shared meals and shared hope.",
       "But the need is still great. With your support, we can reach more families, serve more meals, and ensure that no one in our communities goes to bed hungry."
     ],
     category: "Hunger Relief",
@@ -39,7 +39,7 @@ export const stories = [
       "How We Can Change the Way We Learn. For centuries, education has remained the same—a teacher, a blackboard, a textbook. At Takweyat, we believe every child deserves the chance to learn, and we're working to change the way education reaches those who need it most.",
       "Our Education for All program focuses on establishing learning centers in underserved communities, providing school supplies to students who can't afford them, and supporting educational infrastructure in regions where access to quality education is limited.",
       "We work with local communities to build sustainable educational solutions that empower children and adults alike to build brighter futures. From building classrooms to training teachers, we invest in education as the foundation for lasting change.",
-      "In Pakistan alone, we have supported over 12,000 students, established learning centers in multiple regions, and provided school supplies to thousands of children who would otherwise go without.",
+      "In Pakistan alone, we have supported over 500 students, established learning centers in multiple regions, and provided school supplies to hundreds of children who would otherwise go without.",
       "Education is not just about reading and writing—it's about opening doors, expanding horizons, and giving people the tools they need to build better lives. That's the Takweyat vision."
     ],
     category: "Education",

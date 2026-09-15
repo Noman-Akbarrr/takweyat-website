@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Container, Section, StatsCounter, DonationCTA, Breadcrumbs } from "@/components/ui";
+import { Container, Section, SectionHeading, StatsCounter, DonationCTA } from "@/components/ui";
 import { getProgramBySlug, programs } from "@/lib/data/programs";
 import { countries } from "@/lib/data/countries";
 import { generateProgramSchema, generateBreadcrumbSchema } from "@/lib/seo/schema";
@@ -54,62 +54,78 @@ export default async function ProgramPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-primary-dark via-primary to-primary-light py-24">
+
+      {/* Page Header */}
+      <div className="page-header">
+        <div className="text-center">
+          <div className="text-5xl mb-4">{program.icon}</div>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 animate-slide-in-down">
+            {program.title}
+          </h1>
+          <nav aria-label="breadcrumb" className="animate-slide-in-down">
+            <ol className="flex justify-center gap-2 text-sm">
+              <li>
+                <Link href="/" className="text-white hover:text-primary transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li className="text-white/50">/</li>
+              <li>
+                <Link href="/our-work" className="text-white hover:text-primary transition-colors">
+                  Our Work
+                </Link>
+              </li>
+              <li className="text-white/50">/</li>
+              <li className="text-primary">{program.title}</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+
+      {/* Stats */}
+      <Section className="py-12 bg-surface border-b border-border-light">
         <Container>
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <Breadcrumbs
-                items={[
-                  { label: "Our Work", href: "/our-work" },
-                  { label: program.title },
-                ]}
-              />
-              <div className="text-5xl mb-6">{program.icon}</div>
-              <h1 className="text-4xl md:text-5xl font-bold text-text-inverse">
-                {program.title}
-              </h1>
-              <p className="mt-6 text-lg text-text-inverse/80 leading-relaxed">
-                {program.description}
-              </p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8">
-              <StatsCounter
-                value={program.stats.number.toLocaleString()}
-                label={program.stats.label}
-              />
-            </div>
+          <div className="max-w-md mx-auto text-center">
+            <StatsCounter
+              value={program.stats.number.toLocaleString()}
+              label={program.stats.label}
+            />
           </div>
         </Container>
-      </section>
+      </Section>
 
       {/* About the Program */}
-      <Section>
+      <Section className="py-20">
         <Container>
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-text-primary mb-6">
-              About This Program
-            </h2>
-            {program.longDescription.split("\n\n").map((paragraph, i) => (
-              <p key={i} className="text-text-secondary leading-relaxed mb-4">
-                {paragraph}
-              </p>
-            ))}
+            <SectionHeading
+              badge="About This Program"
+              title={program.title}
+              align="left"
+            />
+            <div className="space-y-4">
+              {program.longDescription.split("\n\n").map((paragraph, i) => (
+                <p key={i} className="text-text-secondary leading-relaxed">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
           </div>
         </Container>
       </Section>
 
       {/* Impact */}
-      <Section className="bg-surface-elevated">
+      <Section className="bg-surface-elevated py-20">
         <Container>
-          <h2 className="text-3xl font-bold text-text-primary mb-8 text-center">
-            Our Impact
-          </h2>
+          <SectionHeading
+            badge="Our Impact"
+            title="What We've Achieved"
+          />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {program.impactItems.map((item, i) => (
-              <div key={i} className="flex items-start gap-4 bg-surface rounded-lg p-6">
-                <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                  <svg className="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div key={i} className="flex items-start gap-4 bg-white rounded-xl p-6 shadow-card">
+                <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
@@ -122,11 +138,12 @@ export default async function ProgramPage({ params }: Props) {
 
       {/* Where We Work */}
       {programCountries.length > 0 && (
-        <Section>
+        <Section className="py-20">
           <Container>
-            <h2 className="text-3xl font-bold text-text-primary mb-8 text-center">
-              Where We Work
-            </h2>
+            <SectionHeading
+              badge="Locations"
+              title="Where We Work"
+            />
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
               {programCountries.map((country) => (
                 <Link
@@ -146,19 +163,18 @@ export default async function ProgramPage({ params }: Props) {
       )}
 
       {/* Donation Tiers */}
-      <Section className="bg-surface-elevated">
+      <Section className="bg-surface-elevated py-20">
         <Container>
-          <h2 className="text-3xl font-bold text-text-primary mb-4 text-center">
-            What Your Donation Achieves
-          </h2>
-          <p className="text-text-secondary text-center mb-12 max-w-2xl mx-auto">
-            Every dollar you give creates real, measurable impact. Here&apos;s what your donation can accomplish.
-          </p>
+          <SectionHeading
+            badge="Donate"
+            title="What Your Donation Achieves"
+            subtitle="Every dollar you give creates real, measurable impact. Here's what your donation can accomplish."
+          />
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 max-w-5xl mx-auto">
             {program.donationTiers.map((tier) => (
               <div
                 key={tier.amount}
-                className="bg-surface rounded-xl p-6 text-center border border-border-light hover:border-primary/30 transition-colors"
+                className="bg-white rounded-xl p-6 text-center shadow-card hover:shadow-lg transition-shadow"
               >
                 <div className="text-3xl font-bold text-primary mb-2">
                   ${tier.amount}
@@ -168,12 +184,14 @@ export default async function ProgramPage({ params }: Props) {
             ))}
           </div>
           <div className="mt-12 text-center">
-            <Link
-              href="/get-involved/donate"
-              className="inline-flex items-center justify-center px-8 py-4 bg-action text-text-inverse font-semibold rounded-lg hover:bg-action-dark transition-colors"
+            <a
+              href="https://wa.me/923145217958"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-primary text-white px-8 py-3 rounded font-semibold hover:bg-primary-dark transition-colors"
             >
               Donate to {program.title}
-            </Link>
+            </a>
           </div>
         </Container>
       </Section>

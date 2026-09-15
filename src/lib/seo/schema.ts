@@ -5,7 +5,7 @@ export const organizationSchema = {
   url: "https://takweyat.org",
   logo: "https://takweyat.org/logo.png",
   description:
-    "Takweyat Foundation is a non-profit charitable organization working across 8 countries to provide education, food, healthcare, and hope where it's needed most.",
+    "Takweyat Foundation is a non-profit charitable organization working across 5 countries to provide education, food, healthcare, and hope where it's needed most.",
   foundingDate: "2023",
   address: {
     "@type": "PostalAddress",
@@ -43,7 +43,6 @@ export const organizationSchema = {
     "Zakat",
     "Sadaqah",
   ],
-  nonprofitStatus: "501(c)(3)",
 };
 
 export function generateArticleSchema(story: {

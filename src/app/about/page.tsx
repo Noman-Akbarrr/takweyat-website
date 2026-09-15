@@ -19,45 +19,50 @@ const aboutLinks = [
 export default function AboutPage() {
   return (
     <>
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-primary-dark via-primary to-primary-light py-24">
-        <Container>
-          <div className="max-w-3xl text-center mx-auto">
-            <p className="text-text-inverse/80 font-semibold uppercase tracking-wider mb-4">
-              About Takweyat Foundation
-            </p>
-            <h1 className="text-4xl md:text-5xl font-bold text-text-inverse">
-              We Are Not Just Hands That Give
-            </h1>
-            <p className="mt-6 text-lg text-text-inverse/80 leading-relaxed">
-              We are hearts that heal. We are voices that speak. We are echoes of justice. Learn about the foundation, our mission, and the people who make it all possible.
-            </p>
-          </div>
-        </Container>
-      </section>
+      {/* Page Header */}
+      <div className="page-header">
+        <div className="text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 animate-slide-in-down">
+            About Us
+          </h1>
+          <nav aria-label="breadcrumb" className="animate-slide-in-down">
+            <ol className="flex justify-center gap-2 text-sm">
+              <li>
+                <Link href="/" className="text-white hover:text-primary transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li className="text-white/50">/</li>
+              <li className="text-primary">About Us</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
 
       {/* About Links Grid */}
-      <Section>
+      <Section className="py-20">
         <Container>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {aboutLinks.map((link) => (
               <Link
                 key={link.title}
                 href={link.href}
-                className="group bg-surface rounded-xl p-8 border border-border-light hover:border-primary/30 hover:shadow-lg transition-all"
+                className="group bg-white text-center p-6 md:p-10 shadow-card rounded-xl hover:shadow-lg transition-all"
               >
                 <div className="text-4xl mb-4">{link.icon}</div>
                 <h2 className="text-xl font-bold text-text-primary group-hover:text-primary transition-colors">
                   {link.title}
                 </h2>
-                <p className="mt-3 text-text-secondary leading-relaxed">
+                <p className="mt-3 text-text-secondary text-sm">
                   {link.description}
                 </p>
-                <div className="mt-6 text-primary font-semibold text-sm flex items-center gap-2">
+                <div className="mt-6 text-primary font-semibold text-sm flex items-center justify-center gap-2">
                   Learn More
-                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
+                  <div className="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center">
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
                 </div>
               </Link>
             ))}
@@ -66,7 +71,7 @@ export default function AboutPage() {
       </Section>
 
       {/* Brand Quote */}
-      <Section className="bg-surface-elevated">
+      <Section className="bg-surface-elevated py-20">
         <Container>
           <div className="max-w-4xl mx-auto text-center">
             <blockquote className="text-2xl md:text-3xl font-bold text-text-primary leading-snug">

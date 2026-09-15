@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { Container, Section, SectionHeading, ProgramCard, DonationCTA, Breadcrumbs } from "@/components/ui";
+import { Container, Section, SectionHeading, ProgramCard, DonationCTA } from "@/components/ui";
 import { programs } from "@/lib/data/programs";
 import { generateBreadcrumbSchema } from "@/lib/seo/schema";
 
@@ -21,27 +21,35 @@ export default function OurWorkPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-primary-dark via-primary to-primary-light py-24">
-        <Container>
-          <div className="max-w-3xl">
-            <Breadcrumbs items={[{ label: "Our Work" }]} />
-            <p className="text-text-inverse/80 font-semibold uppercase tracking-wider mb-4">
-              Our Work
-            </p>
-            <h1 className="text-4xl md:text-5xl font-bold text-text-inverse">
-              Creating Lasting Change Across Six Core Programs
-            </h1>
-            <p className="mt-6 text-lg text-text-inverse/80 leading-relaxed">
-              From education to emergency relief, we work across six core programs to create lasting change in communities around the world.
-            </p>
-          </div>
-        </Container>
-      </section>
+
+      {/* Page Header */}
+      <div className="page-header">
+        <div className="text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 animate-slide-in-down">
+            Our Work
+          </h1>
+          <nav aria-label="breadcrumb" className="animate-slide-in-down">
+            <ol className="flex justify-center gap-2 text-sm">
+              <li>
+                <Link href="/" className="text-white hover:text-primary transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li className="text-white/50">/</li>
+              <li className="text-primary">Our Work</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
 
       {/* Programs Grid */}
-      <Section>
+      <Section className="py-20">
         <Container>
+          <SectionHeading
+            badge="Our Programs"
+            title="Creating Lasting Change Across Six Core Programs"
+            subtitle="From education to emergency relief, we work across six core programs to create lasting change in communities around the world."
+          />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {programs.map((program) => (
               <ProgramCard
@@ -57,12 +65,7 @@ export default function OurWorkPage() {
       </Section>
 
       {/* CTA */}
-      <DonationCTA
-        title="Support Our Programs"
-        description="Every donation helps us expand our reach and deepen our impact. Choose a program that resonates with you."
-        buttonText="Donate Now"
-        buttonHref="/get-involved/donate"
-      />
+      <DonationCTA />
     </>
   );
 }

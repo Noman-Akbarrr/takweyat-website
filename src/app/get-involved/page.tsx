@@ -25,7 +25,7 @@ const ways = [
   {
     title: "Become a Partner",
     description: "Partner with us to expand our reach and impact across 5 countries.",
-    href: "/contact",
+    href: "/about/partners",
     icon: "🤲",
     cta: "Learn More",
   },
@@ -55,45 +55,50 @@ const ways = [
 export default function GetInvolvedPage() {
   return (
     <>
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-primary-dark via-primary to-primary-light py-24">
-        <Container>
-          <div className="max-w-3xl text-center mx-auto">
-            <p className="text-text-inverse/80 font-semibold uppercase tracking-wider mb-4">
-              Get Involved
-            </p>
-            <h1 className="text-4xl md:text-5xl font-bold text-text-inverse">
-              Join Us in Making a Difference
-            </h1>
-            <p className="mt-6 text-lg text-text-inverse/80 leading-relaxed">
-              There are many ways to support Takweyat Foundation. Every action, no matter how small, creates ripples of change.
-            </p>
-          </div>
-        </Container>
-      </section>
+      {/* Page Header */}
+      <div className="page-header">
+        <div className="text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 animate-slide-in-down">
+            Get Involved
+          </h1>
+          <nav aria-label="breadcrumb" className="animate-slide-in-down">
+            <ol className="flex justify-center gap-2 text-sm">
+              <li>
+                <Link href="/" className="text-white hover:text-primary transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li className="text-white/50">/</li>
+              <li className="text-primary">Get Involved</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
 
       {/* Ways to Get Involved */}
-      <Section>
+      <Section className="py-20">
         <Container>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {ways.map((way) => (
               <Link
                 key={way.title}
                 href={way.href}
-                className="group bg-surface rounded-xl p-8 border border-border-light hover:border-primary/30 hover:shadow-lg transition-all"
+                className="group bg-white text-center p-6 md:p-10 shadow-card rounded-xl hover:shadow-lg transition-all"
               >
                 <div className="text-4xl mb-4">{way.icon}</div>
                 <h2 className="text-xl font-bold text-text-primary group-hover:text-primary transition-colors">
                   {way.title}
                 </h2>
-                <p className="mt-3 text-text-secondary leading-relaxed">
+                <p className="mt-3 text-text-secondary text-sm">
                   {way.description}
                 </p>
-                <div className="mt-6 text-primary font-semibold text-sm flex items-center gap-2">
+                <div className="mt-6 text-primary font-semibold text-sm flex items-center justify-center gap-2">
                   {way.cta}
-                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
+                  <div className="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center">
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
                 </div>
               </Link>
             ))}
@@ -101,12 +106,7 @@ export default function GetInvolvedPage() {
         </Container>
       </Section>
 
-      <DonationCTA
-        title="Your Support Changes Lives"
-        description="Whether you donate, volunteer, or spread the word, you're making a difference. Thank you for being part of our mission."
-        buttonText="Donate Now"
-        buttonHref="/get-involved/donate"
-      />
+      <DonationCTA />
     </>
   );
 }

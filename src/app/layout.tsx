@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Geist_Mono } from "next/font/google";
+import { Inter, Saira } from "next/font/google";
 import { Navigation, Footer } from "@/components/ui";
 import { Analytics } from "@/components/analytics/Analytics";
 import { organizationSchema } from "@/lib/seo/schema";
@@ -12,11 +12,12 @@ const inter = Inter({
   preload: true,
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const saira = Saira({
+  variable: "--font-saira",
   subsets: ["latin"],
+  weight: ["500", "600", "700"],
   display: "swap",
-  preload: false,
+  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -96,7 +97,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${geistMono.variable}`}>
+    <html lang="en" className={`${inter.variable} ${saira.variable}`}>
       <head>
         <script
           type="application/ld+json"

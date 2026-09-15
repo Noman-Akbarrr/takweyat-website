@@ -22,7 +22,7 @@ const reports = [
   },
   {
     title: "2025 Impact Report",
-    description: "Measurable outcomes and results from our programs across 8 countries.",
+    description: "Measurable outcomes and results from our programs across 5 countries.",
     type: "Impact Report",
     year: 2025,
   },
@@ -40,7 +40,7 @@ const reports = [
   },
   {
     title: "2024 Impact Report",
-    description: "Measurable outcomes and results from our programs across 8 countries.",
+    description: "Measurable outcomes and results from our programs across 5 countries.",
     type: "Impact Report",
     year: 2024,
   },
@@ -49,22 +49,31 @@ const reports = [
 export default function ReportsPage() {
   return (
     <>
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-primary-dark via-primary to-primary-light py-24">
-        <Container>
-          <div className="max-w-3xl text-center mx-auto">
-            <p className="text-text-inverse/80 font-semibold uppercase tracking-wider mb-4">
-              Transparency
-            </p>
-            <h1 className="text-4xl md:text-5xl font-bold text-text-inverse">
-              Reports & Results
-            </h1>
-            <p className="mt-6 text-lg text-text-inverse/80 leading-relaxed">
-              We believe in full transparency. Download our reports to see exactly how your donations are being used.
-            </p>
-          </div>
-        </Container>
-      </section>
+      {/* Page Header */}
+      <div className="page-header">
+        <div className="text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 animate-slide-in-down">
+            Reports & Results
+          </h1>
+          <nav aria-label="breadcrumb" className="animate-slide-in-down">
+            <ol className="flex justify-center gap-2 text-sm">
+              <li>
+                <Link href="/" className="text-white hover:text-primary transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li className="text-white/50">/</li>
+              <li>
+                <Link href="/our-impact" className="text-white hover:text-primary transition-colors">
+                  Our Impact
+                </Link>
+              </li>
+              <li className="text-white/50">/</li>
+              <li className="text-primary">Reports</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
 
       {/* Reports Grid */}
       <Section>
@@ -89,12 +98,9 @@ export default function ReportsPage() {
                 <p className="mt-2 text-text-secondary text-sm">
                   {report.description}
                 </p>
-                <button className="mt-4 text-primary font-semibold text-sm hover:underline flex items-center gap-2">
-                  Download PDF
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                  </svg>
-                </button>
+                <span className="mt-4 text-text-muted text-sm italic">
+                  Reports coming soon
+                </span>
               </div>
             ))}
           </div>

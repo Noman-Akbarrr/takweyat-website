@@ -2,7 +2,7 @@ export const programs = [
   {
     title: "Education for All",
     slug: "education-for-all",
-    description: "Establishing learning centers, providing school supplies, and supporting underprivileged students across 8 countries. We believe every child deserves the chance to learn, regardless of their circumstances.",
+    description: "Establishing learning centers, providing school supplies, and supporting underprivileged students across 5 countries. We believe every child deserves the chance to learn, regardless of their circumstances.",
     longDescription: `For centuries, education has remained the same—a teacher, a blackboard, a textbook. At Takweyat, we believe every child deserves the chance to learn, and we're working to change the way education reaches those who need it most.
 
 Our Education for All program focuses on establishing learning centers in underserved communities, providing school supplies to students who can't afford them, and supporting educational infrastructure in regions where access to quality education is limited.
@@ -84,7 +84,7 @@ We organize medical camps in underserved areas, provide emergency aid to those i
 
 Every life matters, and we believe that access to healthcare should never depend on where you live or how much money you have.`,
     icon: "🏥",
-    stats: { number: 1000, label: "Clothes Distributed" },
+    stats: { number: 1000, label: "Patients Treated" },
     impactItems: [
       "Organized medical camps in remote areas",
       "Provided emergency medical aid",

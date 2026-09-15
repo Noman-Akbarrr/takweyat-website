@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Container, Section, DonationCTA, Breadcrumbs } from "@/components/ui";
+import { Container, Section, SectionHeading, DonationCTA } from "@/components/ui";
 import { getStoryBySlug, stories } from "@/lib/data/stories";
 import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/seo/schema";
 
@@ -49,33 +49,43 @@ export default async function StoryPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-primary-dark via-primary to-primary-light py-24">
-        <Container>
-          <div className="max-w-4xl mx-auto">
-            <Breadcrumbs
-              items={[
-                { label: "Stories", href: "/stories" },
-                { label: story.title },
-              ]}
-            />
-            <div className="flex flex-wrap gap-3 mb-6">
-              <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium text-text-inverse">
-                {story.category}
-              </span>
-              <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium text-text-inverse">
-                {story.publishedAt}
-              </span>
-            </div>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-text-inverse leading-tight">
-              {story.title}
-            </h1>
+
+      {/* Page Header */}
+      <div className="page-header">
+        <div className="text-center">
+          <div className="flex flex-wrap gap-3 justify-center mb-4">
+            <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium text-white">
+              {story.category}
+            </span>
+            <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium text-white">
+              {story.publishedAt}
+            </span>
           </div>
-        </Container>
-      </section>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 animate-slide-in-down">
+            {story.title}
+          </h1>
+          <nav aria-label="breadcrumb" className="animate-slide-in-down">
+            <ol className="flex justify-center gap-2 text-sm">
+              <li>
+                <Link href="/" className="text-white hover:text-primary transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li className="text-white/50">/</li>
+              <li>
+                <Link href="/stories" className="text-white hover:text-primary transition-colors">
+                  Stories
+                </Link>
+              </li>
+              <li className="text-white/50">/</li>
+              <li className="text-primary line-clamp-1">{story.title}</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
 
       {/* Story Content */}
-      <Section>
+      <Section className="py-20">
         <Container>
           <article className="max-w-3xl mx-auto">
             {/* Featured Image Placeholder */}
@@ -89,9 +99,9 @@ export default async function StoryPage({ params }: Props) {
             </p>
 
             {/* Body */}
-            <div className="prose prose-lg max-w-none">
+            <div className="space-y-6">
               {story.body.map((paragraph, i) => (
-                <p key={i} className="text-text-secondary leading-relaxed mb-6">
+                <p key={i} className="text-text-secondary leading-relaxed">
                   {paragraph}
                 </p>
               ))}
@@ -114,11 +124,12 @@ export default async function StoryPage({ params }: Props) {
       </Section>
 
       {/* Related Stories */}
-      <Section className="bg-surface-elevated">
+      <Section className="bg-surface-elevated py-20">
         <Container>
-          <h2 className="text-2xl font-bold text-text-primary mb-8 text-center">
-            More Stories
-          </h2>
+          <SectionHeading
+            badge="More Stories"
+            title="Read More From The Field"
+          />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {stories
               .filter((s) => s.slug !== story.slug)
@@ -127,7 +138,7 @@ export default async function StoryPage({ params }: Props) {
                 <Link
                   key={s.slug}
                   href={`/stories/${s.slug}`}
-                  className="group bg-surface rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-border-light"
+                  className="group bg-white rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all"
                 >
                   <div className="aspect-[16/10] bg-surface-elevated" />
                   <div className="p-6">
@@ -147,12 +158,7 @@ export default async function StoryPage({ params }: Props) {
         </Container>
       </Section>
 
-      <DonationCTA
-        title="Help Us Write More Stories"
-        description="Your donation helps us create more stories of hope, transformation, and lasting change."
-        buttonText="Donate Now"
-        buttonHref="/get-involved/donate"
-      />
+      <DonationCTA />
     </>
   );
 }

@@ -11,3 +11,6 @@ export { StoryCard } from "./StoryCard";
 export { PartnerLogo } from "./PartnerLogo";
 export { DonationCTA } from "./DonationCTA";
 export { Breadcrumbs } from "./Breadcrumbs";
+export { TeamCard } from "./TeamCard";
+export { HeroCarousel } from "./HeroCarousel";
+export { TestimonialCarousel } from "./TestimonialCarousel";

@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { Container, Section, DonationCTA } from "@/components/ui";
+import { Container, Section, SectionHeading, DonationCTA } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "Transparency",
@@ -10,25 +10,31 @@ export const metadata: Metadata = {
 export default function TransparencyPage() {
   return (
     <>
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-primary-dark via-primary to-primary-light py-24">
-        <Container>
-          <div className="max-w-3xl">
-            <Link href="/about" className="inline-flex items-center gap-2 text-text-inverse/70 hover:text-text-inverse mb-6 transition-colors">
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-              Back to About
-            </Link>
-            <h1 className="text-4xl md:text-5xl font-bold text-text-inverse">
-              Transparency
-            </h1>
-            <p className="mt-6 text-lg text-text-inverse/80 leading-relaxed">
-              We believe every donor deserves to know exactly how their contributions are being used. Full transparency is at the core of everything we do.
-            </p>
-          </div>
-        </Container>
-      </section>
+      {/* Page Header */}
+      <div className="page-header">
+        <div className="text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 animate-slide-in-down">
+            Transparency
+          </h1>
+          <nav aria-label="breadcrumb" className="animate-slide-in-down">
+            <ol className="flex justify-center gap-2 text-sm">
+              <li>
+                <Link href="/" className="text-white hover:text-primary transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li className="text-white/50">/</li>
+              <li>
+                <Link href="/about" className="text-white hover:text-primary transition-colors">
+                  About
+                </Link>
+              </li>
+              <li className="text-white/50">/</li>
+              <li className="text-primary">Transparency</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
 
       {/* Stats */}
       <Section className="py-12 bg-surface border-b border-border-light">
@@ -51,30 +57,32 @@ export default function TransparencyPage() {
       </Section>
 
       {/* Commitments */}
-      <Section>
+      <Section className="py-20">
         <Container>
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-text-primary mb-8 text-center">
-              Our Commitments
-            </h2>
-            <div className="space-y-6">
+            <SectionHeading
+              badge="Our Commitments"
+              title="Full Accountability"
+            />
+            <div className="grid md:grid-cols-2 gap-6">
               {[
-                { title: "Financial Transparency", description: "We publish detailed financial reports showing exactly how every dollar is allocated across our programs." },
-                { title: "Impact Reporting", description: "We measure and report the real impact of our work, including the number of people served, projects completed, and outcomes achieved." },
-                { title: "Accountability", description: "We are accountable to our donors, our partners, and the communities we serve. We welcome questions and feedback." },
-                { title: "Independent Audits", description: "Our financial statements are independently audited to ensure accuracy and compliance with best practices." },
+                { title: "Financial Transparency", description: "We publish detailed financial reports showing exactly how every dollar is allocated across our programs.", icon: "📊" },
+                { title: "Impact Reporting", description: "We measure and report the real impact of our work, including the number of people served, projects completed, and outcomes achieved.", icon: "📈" },
+                { title: "Accountability", description: "We are accountable to our donors, our partners, and the communities we serve. We welcome questions and feedback.", icon: "🤝" },
+                { title: "Independent Audits", description: "Our financial statements are independently audited to ensure accuracy and compliance with best practices.", icon: "✅" },
               ].map((commitment) => (
-                <div key={commitment.title} className="bg-surface rounded-xl p-6 border border-border-light">
+                <div key={commitment.title} className="bg-white rounded-xl p-6 shadow-card">
+                  <div className="text-3xl mb-3">{commitment.icon}</div>
                   <h3 className="text-lg font-bold text-text-primary">{commitment.title}</h3>
-                  <p className="mt-2 text-text-secondary">{commitment.description}</p>
+                  <p className="mt-2 text-text-secondary text-sm">{commitment.description}</p>
                 </div>
               ))}
             </div>
 
             <div className="mt-12 text-center">
               <Link
-                href="/our-impact/reports"
-                className="inline-flex items-center justify-center px-8 py-4 bg-primary text-text-inverse font-semibold rounded-lg hover:bg-primary-dark transition-colors"
+                href="/reports"
+                className="inline-flex items-center gap-2 bg-primary text-white px-8 py-3 rounded font-semibold hover:bg-primary-dark transition-colors"
               >
                 Download Our Reports
               </Link>

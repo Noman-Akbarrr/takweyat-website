@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Container, Section, DonationCTA } from "@/components/ui";
 
 export default function ContactPage() {
@@ -14,37 +15,40 @@ export default function ContactPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // In production, this would send to a backend/API
     setSubmitted(true);
   };
 
   return (
     <>
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-primary-dark via-primary to-primary-light py-24">
-        <Container>
-          <div className="max-w-3xl text-center mx-auto">
-            <p className="text-text-inverse/80 font-semibold uppercase tracking-wider mb-4">
-              Contact Us
-            </p>
-            <h1 className="text-4xl md:text-5xl font-bold text-text-inverse">
-              Get in Touch
-            </h1>
-            <p className="mt-6 text-lg text-text-inverse/80 leading-relaxed">
-              Have a question, want to partner, or need to reach us? We&apos;re here to help.
-            </p>
-          </div>
-        </Container>
-      </section>
+      {/* Page Header */}
+      <div className="page-header">
+        <div className="text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 animate-slide-in-down">
+            Contact Us
+          </h1>
+          <nav aria-label="breadcrumb" className="animate-slide-in-down">
+            <ol className="flex justify-center gap-2 text-sm">
+              <li>
+                <Link href="/" className="text-white hover:text-primary transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li className="text-white/50">/</li>
+              <li className="text-primary">Contact Us</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
 
       {/* Contact Info + Form */}
-      <Section>
+      <Section className="py-20">
         <Container>
           <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
             {/* Contact Info */}
             <div>
+              <div className="badge-pill">Contact Us</div>
               <h2 className="text-2xl font-bold text-text-primary mb-8">
-                Contact Information
+                If You Have Any Query, Please Contact Us
               </h2>
 
               <div className="space-y-6">
@@ -115,13 +119,20 @@ export default function ContactPage() {
               <div className="mt-8">
                 <h3 className="font-semibold text-text-primary mb-4">Follow Us</h3>
                 <div className="flex gap-3">
-                  {["Facebook", "Instagram", "X", "LinkedIn"].map((platform) => (
+                  {[
+                    { name: "F", href: "https://www.facebook.com/share/18W5ghRAB6/" },
+                    { name: "I", href: "https://www.instagram.com/takweyat" },
+                    { name: "X", href: "https://x.com/takweyat" },
+                    { name: "L", href: "https://www.linkedin.com/company/takweyat-foundation/" },
+                  ].map((social) => (
                     <a
-                      key={platform}
-                      href="#"
+                      key={social.name}
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="w-10 h-10 bg-surface-elevated rounded-lg flex items-center justify-center text-text-secondary hover:bg-primary hover:text-text-inverse transition-colors"
                     >
-                      <span className="text-xs font-semibold">{platform[0]}</span>
+                      <span className="text-xs font-semibold">{social.name}</span>
                     </a>
                   ))}
                 </div>
@@ -141,9 +152,16 @@ export default function ContactPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
-                  <h3 className="text-xl font-bold text-text-primary mb-2">Message Sent!</h3>
+                  <h3 className="text-xl font-bold text-text-primary mb-2">Message Received!</h3>
                   <p className="text-text-secondary">
-                    Thank you for reaching out. We&apos;ll get back to you within 24 hours.
+                    For a faster response, please email us directly at{" "}
+                    <a href="mailto:info@takweyat.org" className="text-primary font-semibold hover:underline">
+                      info@takweyat.org
+                    </a>{" "}
+                    or call{" "}
+                    <a href="tel:+923145217958" className="text-primary font-semibold hover:underline">
+                      +92 314 5217958
+                    </a>
                   </p>
                 </div>
               ) : (
@@ -157,7 +175,7 @@ export default function ContactPage() {
                       required
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-4 py-3 border border-border-light rounded-xl focus:outline-none focus:border-primary"
+                      className="w-full px-4 py-3 border border-border-light rounded focus:outline-none focus:border-primary"
                       placeholder="Your name"
                     />
                   </div>
@@ -170,7 +188,7 @@ export default function ContactPage() {
                       required
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-3 border border-border-light rounded-xl focus:outline-none focus:border-primary"
+                      className="w-full px-4 py-3 border border-border-light rounded focus:outline-none focus:border-primary"
                       placeholder="your@email.com"
                     />
                   </div>
@@ -181,7 +199,7 @@ export default function ContactPage() {
                     <select
                       value={formData.subject}
                       onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                      className="w-full px-4 py-3 border border-border-light rounded-xl focus:outline-none focus:border-primary"
+                      className="w-full px-4 py-3 border border-border-light rounded focus:outline-none focus:border-primary"
                     >
                       <option value="general">General Inquiry</option>
                       <option value="media">Media Inquiry</option>
@@ -200,15 +218,20 @@ export default function ContactPage() {
                       rows={5}
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      className="w-full px-4 py-3 border border-border-light rounded-xl focus:outline-none focus:border-primary resize-none"
+                      className="w-full px-4 py-3 border border-border-light rounded focus:outline-none focus:border-primary resize-none"
                       placeholder="How can we help?"
                     />
                   </div>
                   <button
                     type="submit"
-                    className="w-full py-4 bg-action text-text-inverse font-bold rounded-xl hover:bg-action-dark transition-colors"
+                    className="inline-flex items-center gap-2 bg-primary text-white px-8 py-3 rounded font-semibold hover:bg-primary-dark transition-colors"
                   >
                     Send Message
+                    <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
+                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
                   </button>
                 </form>
               )}

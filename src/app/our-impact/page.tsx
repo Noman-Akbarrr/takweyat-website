@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { Container, Section, SectionHeading, StatsCounter, StoryCard, DonationCTA } from "@/components/ui";
+import { Container, Section, SectionHeading, StatsCounter, DonationCTA } from "@/components/ui";
 import { countries } from "@/lib/data/countries";
 import { programs } from "@/lib/data/programs";
 
@@ -21,28 +21,31 @@ const detailedStats = [
   { value: "1,000+", label: "Hot Meals Distributed" },
   { value: "50+", label: "Legal Services Provided" },
   { value: "200+", label: "Ration Packages Distributed" },
-  { value: "1,000+", label: "Clothes Distributed" },
+  { value: "1,000+", label: "Patients Treated" },
 ];
 
 export default function ImpactPage() {
   return (
     <>
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-primary-dark via-primary to-primary-light py-24">
-        <Container>
-          <div className="max-w-3xl text-center mx-auto">
-            <p className="text-text-inverse/80 font-semibold uppercase tracking-wider mb-4">
-              Our Impact
-            </p>
-            <h1 className="text-4xl md:text-5xl font-bold text-text-inverse">
-              How Your Support Creates Change
-            </h1>
-            <p className="mt-6 text-lg text-text-inverse/80 leading-relaxed">
-              We believe in transparency and accountability. Here&apos;s the real, measurable impact of your generosity.
-            </p>
-          </div>
-        </Container>
-      </section>
+      {/* Page Header */}
+      <div className="page-header">
+        <div className="text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 animate-slide-in-down">
+            Our Impact
+          </h1>
+          <nav aria-label="breadcrumb" className="animate-slide-in-down">
+            <ol className="flex justify-center gap-2 text-sm">
+              <li>
+                <Link href="/" className="text-white hover:text-primary transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li className="text-white/50">/</li>
+              <li className="text-primary">Our Impact</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
 
       {/* Key Stats */}
       <Section className="py-16 bg-surface border-b border-border-light">
@@ -56,15 +59,16 @@ export default function ImpactPage() {
       </Section>
 
       {/* Detailed Impact */}
-      <Section>
+      <Section className="py-20">
         <Container>
           <SectionHeading
+            badge="Our Numbers"
             title="Impact at a Glance"
-            subtitle="The numbers behind our work. Every number represents a life changed, a community strengthened, a future brightened."
+            subtitle="The numbers behind our work. Every number represents a life changed."
           />
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 max-w-5xl mx-auto">
             {detailedStats.map((stat) => (
-              <div key={stat.label} className="bg-surface rounded-xl p-6 text-center border border-border-light">
+              <div key={stat.label} className="bg-white rounded-xl p-6 text-center shadow-card">
                 <div className="text-2xl md:text-3xl font-bold text-primary">
                   {stat.value}
                 </div>
@@ -77,31 +81,20 @@ export default function ImpactPage() {
         </Container>
       </Section>
 
-      {/* Where We Work Map */}
-      <Section className="bg-surface-elevated">
+      {/* Where We Work */}
+      <Section className="bg-surface-elevated py-20">
         <Container>
           <SectionHeading
+            badge="Locations"
             title="Where We Work"
             subtitle="Our presence across 5 countries, each with unique challenges and ongoing programs."
           />
-
-          {/* Map Placeholder */}
-          <div className="bg-surface rounded-2xl p-8 md:p-16 text-center mb-12">
-            <div className="aspect-[2/1] bg-gradient-to-br from-primary/5 to-primary/10 rounded-xl flex items-center justify-center">
-              <div>
-                <div className="text-6xl mb-4">🌍</div>
-                <p className="text-text-muted">Interactive Impact Map</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Country List */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
             {countries.filter(c => c.impact.projects > 0).map((country) => (
               <Link
                 key={country.slug}
                 href={`/where-we-work/${country.slug}`}
-                className="group bg-surface rounded-lg p-4 flex items-center gap-4 hover:bg-primary/5 transition-colors border border-border-light"
+                className="group bg-white rounded-lg p-4 flex items-center gap-4 hover:bg-primary/5 transition-colors shadow-card"
               >
                 <div className="w-3 h-3 bg-primary rounded-full flex-shrink-0 group-hover:scale-125 transition-transform" />
                 <div>
@@ -119,9 +112,10 @@ export default function ImpactPage() {
       </Section>
 
       {/* Impact by Program */}
-      <Section>
+      <Section className="py-20">
         <Container>
           <SectionHeading
+            badge="Programs"
             title="Impact by Program"
             subtitle="How each of our programs is making a difference."
           />
@@ -130,7 +124,7 @@ export default function ImpactPage() {
               <Link
                 key={program.slug}
                 href={`/our-work/${program.slug}`}
-                className="group bg-surface rounded-xl p-6 border border-border-light hover:border-primary/30 hover:shadow-md transition-all"
+                className="group bg-white rounded-xl p-6 shadow-card hover:shadow-lg transition-all"
               >
                 <div className="text-3xl mb-4">{program.icon}</div>
                 <h3 className="text-lg font-bold text-text-primary group-hover:text-primary transition-colors">
@@ -155,10 +149,11 @@ export default function ImpactPage() {
       </Section>
 
       {/* Reports */}
-      <Section className="bg-surface-elevated">
+      <Section className="bg-surface-elevated py-20">
         <Container>
           <SectionHeading
-            title="Reports & Transparency"
+            badge="Reports"
+            title="Transparency & Reports"
             subtitle="We believe in full transparency. Download our reports to see how your donations are being used."
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
@@ -167,7 +162,7 @@ export default function ImpactPage() {
               { title: "2025 Financial Report", type: "financial", year: 2025 },
               { title: "2025 Impact Report", type: "impact", year: 2025 },
             ].map((report) => (
-              <div key={report.title} className="bg-surface rounded-xl p-6 border border-border-light text-center">
+              <div key={report.title} className="bg-white rounded-xl p-6 shadow-card text-center">
                 <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
                   <svg className="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -175,9 +170,9 @@ export default function ImpactPage() {
                 </div>
                 <h3 className="font-bold text-text-primary">{report.title}</h3>
                 <p className="mt-1 text-sm text-text-muted capitalize">{report.type} Report</p>
-                <button className="mt-4 text-primary font-semibold text-sm hover:underline">
-                  Download PDF →
-                </button>
+                <span className="mt-4 text-text-muted text-sm italic block">
+                  Coming soon
+                </span>
               </div>
             ))}
           </div>
