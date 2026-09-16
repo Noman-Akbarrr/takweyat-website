@@ -14,7 +14,14 @@ const nextConfig: NextConfig = {
   },
   headers: async () => [
     {
-      source: "/(.*)",
+      source: "/admin/:path*",
+      headers: [
+        { key: "X-Frame-Options", value: "DENY" },
+        { key: "X-Content-Type-Options", value: "nosniff" },
+      ],
+    },
+    {
+      source: "/((?!admin).*)",
       headers: [
         { key: "X-Frame-Options", value: "DENY" },
         { key: "X-Content-Type-Options", value: "nosniff" },
