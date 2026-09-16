@@ -29,7 +29,7 @@ export default buildConfig({
     Users,
   ],
   globals: [GlobalSettings],
-  secret: process.env.PAYLOAD_SECRET || 'CHANGE-ME-IN-PRODUCTION',
+  secret: process.env.PAYLOAD_SECRET || 'c1167cbc27c3de8f48c01eaed295d5ed92a2aaf8d4268e9aa692d96f8cd2daa7',
   typescript: {
     outputFile: 'payload-types.ts',
   },
