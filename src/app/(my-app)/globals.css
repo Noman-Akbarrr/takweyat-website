@@ -1,6 +1,7 @@
 @import "tailwindcss";
+@source "../..";
 
-@theme inline {
+@theme {
   /* Colors — ChariTeam-inspired */
   --color-primary: #0d7377;
   --color-primary-dark: #095456;
