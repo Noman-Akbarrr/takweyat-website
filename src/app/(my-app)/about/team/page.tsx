@@ -4,16 +4,40 @@ import { Container, Section, SectionHeading, DonationCTA, TeamCard } from "@/com
 
 export const metadata: Metadata = {
   title: "Leadership & Team",
-  description: "Meet the dedicated individuals behind Takweyat Foundation who work tirelessly to create change.",
+  description: "Meet the dedicated individuals behind Takweyat Foundation who work tirelessly to create lasting change across 5 countries.",
 };
 
 const team = [
-  { name: "Name 1", role: "Founder & CEO" },
-  { name: "Name 2", role: "Director of Programs" },
-  { name: "Name 3", role: "Head of Operations" },
-  { name: "Name 4", role: "Communications Director" },
-  { name: "Name 5", role: "Finance Director" },
-  { name: "Name 6", role: "Country Director - Pakistan" },
+  {
+    name: "Dr. Usman Tariq",
+    role: "Founder & Chairman",
+    bio: "Over a decade of leadership in humanitarian outreach, public health, and international relief.",
+  },
+  {
+    name: "Ayesha Malik",
+    role: "Director of Programs",
+    bio: "Leading educational development, vocational training, and community empowerment initiatives.",
+  },
+  {
+    name: "Tariq Mahmood",
+    role: "Head of Operations",
+    bio: "Managing cross-border logistics, supply chain distribution, and on-ground partner networks.",
+  },
+  {
+    name: "Zainab Ahmed",
+    role: "Communications & Impact Lead",
+    bio: "Spearheading storytelling, donor relations, and global transparency reporting.",
+  },
+  {
+    name: "Farhan Saeed",
+    role: "Finance Director",
+    bio: "Ensuring rigorous financial governance, audit compliance, and 100% donation accountability.",
+  },
+  {
+    name: "Maryam Bibi",
+    role: "Country Director - Pakistan",
+    bio: "Directing provincial field coordinators, free medical camps, and flood relief operations.",
+  },
 ];
 
 export default function TeamPage() {
@@ -50,9 +74,10 @@ export default function TeamPage() {
         <Container>
           <SectionHeading
             badge="Team Members"
-            title="Let's Meet With Our Ordinary Soldiers"
+            title="Meet Our Leadership & Field Coordinators"
+            subtitle="The passionate individuals working on the ground and behind the scenes to deliver hope and dignity."
           />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {team.map((member) => (
               <TeamCard key={member.name} {...member} />
             ))}
@@ -68,13 +93,13 @@ export default function TeamPage() {
               Join Our Team
             </h2>
             <p className="text-text-secondary leading-relaxed mb-8">
-              We&apos;re always looking for passionate individuals who share our vision of a better world. If you believe in our mission and want to make a difference, we&apos;d love to hear from you.
+              We are always looking for passionate individuals who share our vision of an equitable, compassionate world. Whether in program coordination, healthcare, or field logistics, your skills can change lives.
             </p>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 bg-primary text-white px-8 py-3 rounded font-semibold hover:bg-primary-dark transition-colors"
+              className="inline-flex items-center gap-2 bg-primary text-white px-8 py-3 rounded-full font-semibold hover:bg-primary-dark transition-colors shadow-md"
             >
-              Contact Us
+              Contact Us to Volunteer
             </Link>
           </div>
         </Container>

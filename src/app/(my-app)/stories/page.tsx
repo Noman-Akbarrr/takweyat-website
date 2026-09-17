@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { Container, Section, SectionHeading, StoryCard, DonationCTA } from "@/components/ui";
-import { stories } from "@/lib/data/stories";
+import { getStories } from "@/lib/cms";
 import { generateBreadcrumbSchema } from "@/lib/seo/schema";
 
 export const metadata: Metadata = {
@@ -9,7 +9,9 @@ export const metadata: Metadata = {
   description: "Real stories from the field. Read about the lives we've changed and the communities we've served.",
 };
 
-export default function StoriesPage() {
+export default async function StoriesPage() {
+  const stories = await getStories();
+
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: "Home", url: "/" },
     { name: "Stories", url: "/stories" },
@@ -48,7 +50,7 @@ export default function StoriesPage() {
           <SectionHeading
             badge="Our Stories"
             title="Real Stories. Real Impact. Real Change."
-            subtitle="Behind every number is a person. Behind every project is a story."
+            subtitle="Behind every number is a person. Behind every project is a story of hope renewed."
           />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {stories.map((story) => (

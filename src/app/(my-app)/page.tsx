@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   Container,
   Section,
@@ -5,93 +6,54 @@ import {
   SectionHeading,
   ProgramCard,
   StoryCard,
-  DonationCTA,
   HeroCarousel,
   TestimonialCarousel,
   TeamCard,
 } from "@/components/ui";
 import { generateBreadcrumbSchema } from "@/lib/seo/schema";
-
-const programs = [
-  {
-    title: "Education For African Children",
-    description: "Establishing learning centers, providing school supplies, and supporting underprivileged students across 5 countries.",
-    href: "/our-work/education-for-all",
-    icon: "Education",
-    progress: 90,
-    goal: "$10,000",
-    raised: "$9,542",
-  },
-  {
-    title: "Ensure Pure Drinking Water",
-    description: "Providing clean and safe drinking water to communities in need across Pakistan, Palestine, and Sudan.",
-    href: "/our-work/hunger-relief-food-distribution",
-    icon: "Pure Water",
-    progress: 75,
-    goal: "$10,000",
-    raised: "$7,500",
-  },
-  {
-    title: "Ensure Medical Treatment",
-    description: "Medical camps, emergency aid, and financial support for critical treatments. Working toward a free hospital.",
-    href: "/our-work/medical-aid-healthcare",
-    icon: "Healthy Life",
-    progress: 85,
-    goal: "$10,000",
-    raised: "$8,500",
-  },
-];
+import { getPrograms, getStories, getTeamMembers, getGlobalSettings } from "@/lib/cms";
+import { BookOpen, HeartPulse, Droplets, ArrowRight, CheckCircle2 } from "@/components/ui/Icons";
 
 const services = [
   {
-    title: "Child Education",
-    description: "We establish learning centers and provide school supplies to children who can't afford them.",
+    title: "Quality Child Education",
+    description: "Establishing accredited learning centers, providing free school supplies, uniforms, and digital literacy to underprivileged children.",
     href: "/our-work/education-for-all",
-    icon: "📚",
+    icon: BookOpen,
   },
   {
-    title: "Medical Treatment",
-    description: "We organize medical camps and provide emergency aid to communities in need.",
+    title: "Medical Relief & Healthcare",
+    description: "Mobile clinics, free surgical support, preventive maternal screenings, and subsidized medicine for families in extreme poverty.",
     href: "/our-work/medical-aid-healthcare",
-    icon: "🏥",
+    icon: HeartPulse,
   },
   {
-    title: "Pure Drinking Water",
-    description: "We provide clean and safe drinking water to underserved communities.",
+    title: "Clean Water & Nutrition",
+    description: "Installing deep solar water wells, water filtration plants, and daily hot meal distribution to combat malnutrition in conflict zones.",
     href: "/our-work/hunger-relief-food-distribution",
-    icon: "💧",
+    icon: Droplets,
   },
 ];
 
-const stories = [
-  {
-    title: "Takweyat Foundation: A Relentless Force for Social Justice",
-    excerpt: "In a world where injustice often goes unchallenged, Takweyat Foundation stands as a beacon of hope, resilience, and action...",
-    slug: "relentless-force-for-social-justice",
-    category: "Social Justice",
-  },
-  {
-    title: "Feeding Hope: Takweyat's Mission to Nourish Lives",
-    excerpt: "At Takweyat, we believe that a hot meal is more than just food—it's dignity, hope, and a step toward a better society...",
-    slug: "feeding-hope-takweyats-mission-to-nourish-lives",
-    category: "Hunger Relief",
-  },
-  {
-    title: "Revolutionizing Education: The Takweyat Vision",
-    excerpt: "How We Can Change the Way We Learn. For centuries, education has remained the same—a teacher, a blackboard, a textbook...",
-    slug: "revolutionizing-education-the-takweyat-vision",
-    category: "Education",
-  },
-];
+export default async function Home() {
+  const [allPrograms, allStories, teamMembers, globalSettings] = await Promise.all([
+    getPrograms(),
+    getStories(),
+    getTeamMembers(),
+    getGlobalSettings(),
+  ]);
 
-const team = [
-  { name: "Full Name", role: "Founder" },
-  { name: "Full Name", role: "Director" },
-  { name: "Full Name", role: "Coordinator" },
-  { name: "Full Name", role: "Volunteer Lead" },
-];
+  const featuredPrograms = allPrograms.slice(0, 3);
+  const featuredStories = allStories.slice(0, 3);
+  const featuredTeam = teamMembers.slice(0, 4);
+  const stats = globalSettings?.impactStats || {
+    childrenEducated: 500,
+    hotMealsDistributed: 1000,
+    legalServicesProvided: 50,
+    rationPackagesDistributed: 200,
+    peopleReached: 46000,
+  };
 
-export default function Home() {
   const breadcrumbSchema = generateBreadcrumbSchema([{ name: "Home", url: "/" }]);
 
   return (
@@ -108,138 +70,184 @@ export default function Home() {
       <Section className="py-20">
         <Container>
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="relative overflow-hidden rounded-xl" style={{ minHeight: "400px" }}>
-              <div className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-                <span className="text-text-muted text-sm">Takweyat Foundation</span>
+            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/20 via-primary-dark/10 to-primary-light/15 p-8 border border-border-light min-h-[380px] flex flex-col justify-between">
+              <div>
+                <span className="inline-block bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider mb-4">
+                  Humanitarian Mission
+                </span>
+                <h3 className="text-2xl sm:text-3xl font-bold text-text-primary mb-3">
+                  Serving With Honor, Transparency & Direct Impact
+                </h3>
+                <p className="text-text-secondary text-sm leading-relaxed mb-6">
+                  Since 2023, Takweyat Foundation has been an unwavering lifeline across Pakistan, Palestine, Sudan, and marginalized communities.
+                </p>
+              </div>
+
+              <div className="space-y-2.5 pt-4 border-t border-primary/20">
+                <div className="flex items-center gap-2.5 text-sm font-semibold text-text-primary">
+                  <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
+                  <span>100% Verified Zakat & Sadaqah Distribution</span>
+                </div>
+                <div className="flex items-center gap-2.5 text-sm font-semibold text-text-primary">
+                  <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
+                  <span>Direct Field Presence in 5 Vulnerable Regions</span>
+                </div>
+                <div className="flex items-center gap-2.5 text-sm font-semibold text-text-primary">
+                  <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
+                  <span>Sustainable Infrastructure, Not Just Temporary Aid</span>
+                </div>
               </div>
             </div>
+
             <div>
               <div className="badge-pill">About Us</div>
-              <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-5">
-                We Help People In Need Around The World
+              <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-5 leading-tight">
+                We Empower Communities In Need Around The World
               </h2>
-              <div className="bg-surface-elevated border-b-4 border-primary rounded p-4 mb-4">
-                <p className="text-text-primary mb-2">
-                  Takweyat Foundation is dedicated to helping communities build a better future through education, food, healthcare, and hope.
+              <div className="bg-surface-elevated border-l-4 border-primary rounded-r-lg p-4 mb-5 shadow-sm">
+                <p className="text-text-primary font-medium text-sm leading-relaxed mb-1">
+                  Takweyat Foundation is dedicated to helping vulnerable communities build a resilient future through education, nutrition, healthcare, and human dignity.
                 </p>
-                <span className="text-primary font-semibold">Takweyat Foundation</span>
+                <span className="text-primary font-bold text-xs uppercase tracking-wide">
+                  Takweyat Foundation Global Aid
+                </span>
               </div>
-              <p className="text-text-secondary mb-6 leading-relaxed">
-                Since 2023, we have been working across 5 countries to provide essential services to communities in need. From education to emergency relief, we are committed to making a lasting difference.
+              <p className="text-text-secondary mb-6 leading-relaxed text-sm sm:text-base">
+                Our grassroots initiatives are driven by field teams that live and work in the communities they serve. From crisis emergency response to long-term community schools and clinics, we ensure your assistance transforms real lives.
               </p>
               <div className="flex flex-wrap gap-4">
-                <a
+                <Link
                   href="/about"
-                  className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded font-semibold hover:bg-primary-dark transition-colors"
+                  className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-full font-semibold hover:bg-primary-dark transition-all shadow-md text-sm"
                 >
-                  Learn More
-                  <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
-                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </a>
-                <a
+                  <span>Learn More About Us</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link
                   href="/contact"
-                  className="inline-flex items-center gap-2 border-2 border-primary text-primary px-6 py-3 rounded font-semibold hover:bg-primary hover:text-white transition-all"
+                  className="inline-flex items-center gap-2 border-2 border-primary text-primary px-6 py-3 rounded-full font-semibold hover:bg-primary hover:text-white transition-all text-sm"
                 >
-                  Contact Us
-                </a>
+                  Contact Our Team
+                </Link>
               </div>
             </div>
           </div>
         </Container>
       </Section>
 
-      {/* Feature Causes */}
+      {/* Feature Causes / Programs */}
       <Section className="bg-surface-elevated py-20">
         <Container>
           <SectionHeading
-            badge="Feature Causes"
-            title="Every Child Deserves The Opportunity To Learn"
+            badge="Featured Programs"
+            title="Sustained Humanitarian Initiatives"
+            subtitle="Explore our ongoing high-priority programs delivering measurable assistance on the ground."
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {programs.map((program) => (
-              <ProgramCard key={program.href} {...program} />
+            {featuredPrograms.map((program) => (
+              <ProgramCard
+                key={program.slug}
+                title={program.title}
+                description={program.description}
+                href={`/our-work/${program.slug}`}
+                icon={program.icon}
+                progress={85}
+                goal="$10,000"
+                raised="$8,500"
+              />
             ))}
           </div>
         </Container>
       </Section>
 
-      {/* What We Do */}
+      {/* What We Do Services */}
       <Section className="py-20">
         <Container>
           <SectionHeading
             badge="What We Do"
-            title="Learn More What We Do And Get Involved"
+            title="Our Core Areas of Impact"
+            subtitle="Holistic support designed to break generational poverty and rebuild lives."
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {services.map((service) => (
-              <div key={service.href} className="bg-white text-center p-6 md:p-10 shadow-card rounded-xl hover:shadow-lg transition-shadow">
-                <div className="text-4xl mb-4">{service.icon}</div>
-                <h4 className="text-xl font-bold text-text-primary mb-3">{service.title}</h4>
-                <p className="text-text-secondary mb-4">{service.description}</p>
-                <a
-                  href={service.href}
-                  className="inline-flex items-center gap-2 border-2 border-primary text-primary px-5 py-2 rounded font-semibold hover:bg-primary hover:text-white transition-all"
+            {services.map((service) => {
+              const Icon = service.icon;
+              return (
+                <div
+                  key={service.href}
+                  className="bg-surface text-center p-8 md:p-10 shadow-card rounded-2xl hover:shadow-xl transition-all border border-border-light flex flex-col items-center group"
                 >
-                  Learn More
-                  <div className="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center">
-                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                  <div className="w-14 h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-colors">
+                    <Icon className="w-7 h-7" />
                   </div>
-                </a>
-              </div>
-            ))}
+                  <h4 className="text-xl font-bold text-text-primary mb-3 group-hover:text-primary transition-colors">
+                    {service.title}
+                  </h4>
+                  <p className="text-text-secondary text-sm leading-relaxed mb-6 flex-1">
+                    {service.description}
+                  </p>
+                  <Link
+                    href={service.href}
+                    className="inline-flex items-center gap-2 border border-primary/30 text-primary px-5 py-2 rounded-full font-semibold text-xs uppercase tracking-wider hover:bg-primary hover:text-white transition-all"
+                  >
+                    <span>Explore Initiative</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              );
+            })}
           </div>
         </Container>
       </Section>
 
-      {/* Stats Bar */}
-      <Section className="py-12 bg-surface border-y border-border-light">
+      {/* Live Stats Bar */}
+      <Section className="py-14 bg-surface border-y border-border-light">
         <Container>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
-            <StatsCounter value="500+" label="Children Being Educated" />
-            <StatsCounter value="1K+" label="Hot Meals Distributed" />
-            <StatsCounter value="50+" label="Legal Services Provided" />
-            <StatsCounter value="200+" label="Ration Packages Distributed" />
-            <StatsCounter value="1K+" label="Patients Treated" />
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-6 text-center">
+            <StatsCounter value={`${stats.childrenEducated}+`} label="Children Being Educated" />
+            <StatsCounter value={`${stats.hotMealsDistributed}+`} label="Hot Meals Distributed" />
+            <StatsCounter value={`${stats.legalServicesProvided}+`} label="Legal Aids Provided" />
+            <StatsCounter value={`${stats.rationPackagesDistributed}+`} label="Ration Packs Delivered" />
+            <StatsCounter value={`${stats.peopleReached ? (stats.peopleReached / 1000).toFixed(0) + 'K+' : '46K+'}`} label="Total Lives Reached" />
           </div>
         </Container>
       </Section>
 
       {/* Donation CTA */}
-      <section className="parallax-section py-20" style={{ backgroundImage: "url(/images/donate-bg.jpg)" }}>
-        <div className="absolute inset-0 bg-surface-dark/80" />
+      <section className="parallax-section py-20">
         <Container>
           <div className="relative z-10 grid md:grid-cols-2 gap-12 items-center">
             <div>
-              <div className="badge-pill !bg-white/10 !text-white">Donate Now</div>
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-5">
-                Thanks For The Results Achieved With You
+              <div className="badge-pill !bg-white/10 !text-white">Direct Impact</div>
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-5 leading-tight">
+                Your Support Saves Lives and Builds Resilient Futures
               </h2>
-              <p className="text-white/70">
-                Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet.
+              <p className="text-white/80 leading-relaxed text-sm sm:text-base">
+                Every single donation is allocated directly toward urgent supplies, nutritious meals, life-saving healthcare, and schooling for children in conflict and poverty zones. Complete transparency is our sacred promise to our donors.
               </p>
             </div>
-            <div className="bg-white p-8 rounded-xl">
+            <div className="bg-surface p-8 rounded-2xl shadow-2xl border border-white/10">
               <form className="space-y-4">
                 <input
                   type="text"
-                  placeholder="Your Name"
-                  className="w-full px-4 py-3 bg-surface-elevated rounded border-0 focus:ring-2 focus:ring-primary"
+                  placeholder="Your Full Name"
+                  className="w-full px-4 py-3 bg-surface-elevated rounded-lg border border-border-light text-text-primary text-sm focus:ring-2 focus:ring-primary focus:outline-none"
                 />
                 <input
                   type="email"
-                  placeholder="Your Email"
-                  className="w-full px-4 py-3 bg-surface-elevated rounded border-0 focus:ring-2 focus:ring-primary"
+                  placeholder="Your Email Address"
+                  className="w-full px-4 py-3 bg-surface-elevated rounded-lg border border-border-light text-text-primary text-sm focus:ring-2 focus:ring-primary focus:outline-none"
                 />
-                <div className="flex gap-4">
-                  {["$10", "$20", "$30"].map((amount) => (
+                <div className="flex gap-3">
+                  {["$25", "$50", "$100", "$250"].map((amount, idx) => (
                     <label key={amount} className="flex-1">
-                      <input type="radio" name="amount" value={amount} className="sr-only peer" defaultChecked={amount === "$10"} />
-                      <div className="text-center py-3 bg-surface-elevated rounded border-2 border-transparent peer-checked:border-primary peer-checked:text-primary cursor-pointer transition-all">
+                      <input
+                        type="radio"
+                        name="amount"
+                        value={amount}
+                        className="sr-only peer"
+                        defaultChecked={idx === 1}
+                      />
+                      <div className="text-center py-2.5 bg-surface-elevated rounded-lg border-2 border-transparent peer-checked:border-primary peer-checked:text-primary peer-checked:font-bold text-sm cursor-pointer transition-all">
                         {amount}
                       </div>
                     </label>
@@ -249,9 +257,9 @@ export default function Home() {
                   href="https://wa.me/923145217958"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block w-full bg-primary text-white text-center py-4 rounded font-semibold hover:bg-primary-dark transition-colors"
+                  className="block w-full bg-action text-white text-center py-3.5 rounded-full font-bold text-sm hover:bg-action-dark transition-all shadow-md"
                 >
-                  Donate Now
+                  Proceed to Donate
                 </a>
               </form>
             </div>
@@ -263,11 +271,12 @@ export default function Home() {
       <Section className="py-20">
         <Container>
           <SectionHeading
-            badge="Team Members"
-            title="Let's Meet With Our Ordinary Soldiers"
+            badge="Leadership & Field Team"
+            title="The People Behind Our Humanitarian Mission"
+            subtitle="Meet our committed leaders and coordinators ensuring aid reaches those who need it most."
           />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {team.map((member) => (
+            {featuredTeam.map((member) => (
               <TeamCard key={member.name} {...member} />
             ))}
           </div>
@@ -275,26 +284,27 @@ export default function Home() {
       </Section>
 
       {/* Testimonials */}
-      <Section className="py-20">
+      <Section className="py-20 bg-surface-elevated">
         <Container>
           <SectionHeading
-            badge="Testimonial"
-            title="Trusted By Thousands Of People And Nonprofits"
+            badge="Testimonials"
+            title="Voices of Dignity and Gratitude"
+            subtitle="Hear directly from families, local partners, and students supported by Takweyat Foundation."
           />
           <TestimonialCarousel />
         </Container>
       </Section>
 
-      {/* Featured Stories */}
-      <Section className="bg-surface-elevated py-20">
+      {/* Featured Stories from Field */}
+      <Section className="py-20">
         <Container>
           <SectionHeading
-            badge="Our Stories"
-            title="Real Stories From The Field"
-            subtitle="Every person we serve has a story. Every donation writes a new chapter."
+            badge="Field Stories"
+            title="Real Stories of Hope and Resilience"
+            subtitle="Every life touched represents a profound journey of perseverance and renewal."
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {stories.map((story) => (
+            {featuredStories.map((story) => (
               <StoryCard key={story.slug} {...story} />
             ))}
           </div>

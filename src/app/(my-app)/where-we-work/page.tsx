@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { Container, Section, SectionHeading, DonationCTA } from "@/components/ui";
-import { countries } from "@/lib/data/countries";
+import { Container, Section, SectionHeading, DonationCTA, CountryCard } from "@/components/ui";
+import { getCountries, getGlobalSettings } from "@/lib/cms";
 import { generateBreadcrumbSchema } from "@/lib/seo/schema";
 
 export const metadata: Metadata = {
@@ -9,7 +9,18 @@ export const metadata: Metadata = {
   description: "Takweyat Foundation operates across 5 countries, bringing education, food, healthcare, and hope to communities in need.",
 };
 
-export default function WhereWeWorkPage() {
+export default async function WhereWeWorkPage() {
+  const [countries, globalSettings] = await Promise.all([
+    getCountries(),
+    getGlobalSettings(),
+  ]);
+
+  const stats = globalSettings?.impactStats || {
+    countries: 5,
+    projects: 215,
+    peopleReached: 46000,
+  };
+
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: "Home", url: "/" },
     { name: "Where We Work", url: "/where-we-work" },
@@ -47,16 +58,18 @@ export default function WhereWeWorkPage() {
         <Container>
           <div className="grid grid-cols-3 gap-8 max-w-3xl mx-auto">
             <div className="text-center">
-              <div className="text-4xl font-bold text-primary">5</div>
-              <div className="text-sm text-text-secondary uppercase tracking-wider mt-1">Countries</div>
+              <div className="text-4xl font-bold text-primary">{stats.countries || 5}</div>
+              <div className="text-sm text-text-secondary uppercase tracking-wider mt-1 font-semibold">Countries</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-primary">215+</div>
-              <div className="text-sm text-text-secondary uppercase tracking-wider mt-1">Projects</div>
+              <div className="text-4xl font-bold text-primary">{stats.projects || 215}+</div>
+              <div className="text-sm text-text-secondary uppercase tracking-wider mt-1 font-semibold">Projects</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-primary">46,000+</div>
-              <div className="text-sm text-text-secondary uppercase tracking-wider mt-1">People Reached</div>
+              <div className="text-4xl font-bold text-primary">
+                {stats.peopleReached ? (stats.peopleReached / 1000).toFixed(0) + "K+" : "46,000+"}
+              </div>
+              <div className="text-sm text-text-secondary uppercase tracking-wider mt-1 font-semibold">People Reached</div>
             </div>
           </div>
         </Container>
@@ -67,36 +80,18 @@ export default function WhereWeWorkPage() {
         <Container>
           <SectionHeading
             badge="Our Locations"
-            title="5 Countries. One Mission."
-            subtitle="Takweyat Foundation operates across 5 countries, working with local communities to provide education, food, healthcare, and hope where it's needed most."
+            title="5 Regions. One Unified Humanitarian Mission."
+            subtitle="Takweyat Foundation operates across 5 countries, working with local communities to provide education, nutrition, healthcare, and emergency assistance where it's needed most."
           />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {countries.map((country) => (
-              <Link
+              <CountryCard
                 key={country.slug}
-                href={`/where-we-work/${country.slug}`}
-                className="group bg-white rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all duration-300"
-              >
-                <div className="h-40 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <div className="w-4 h-4 bg-white rounded-full" />
-                  </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-text-primary group-hover:text-primary transition-colors">
-                    {country.name}
-                  </h3>
-                  <p className="mt-2 text-text-secondary text-sm line-clamp-2">
-                    {country.description}
-                  </p>
-                  <div className="mt-4 text-primary font-semibold text-sm flex items-center gap-2">
-                    Explore
-                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </div>
-              </Link>
+                name={country.name}
+                slug={country.slug}
+                description={country.description}
+                imageUrl={country.heroImage || undefined}
+              />
             ))}
           </div>
         </Container>

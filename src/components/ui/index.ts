@@ -14,3 +14,4 @@ export { Breadcrumbs } from "./Breadcrumbs";
 export { TeamCard } from "./TeamCard";
 export { HeroCarousel } from "./HeroCarousel";
 export { TestimonialCarousel } from "./TestimonialCarousel";
+export * from "./Icons";

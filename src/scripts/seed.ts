@@ -1,31 +1,62 @@
-import { getPayload } from 'payload'
-import config from '@payload-config'
+import { createRequire } from 'node:module'
+
+// Fix @next/env interop in Next 16 and Payload 3 within tsx/ESM environments
+const req = createRequire(import.meta.url)
+try {
+  const nextEnv = req('@next/env')
+  if (nextEnv && !nextEnv.default) {
+    nextEnv.default = nextEnv
+  }
+} catch {
+  // ignore
+}
+
 import { programs } from '../lib/data/programs'
 import { countries } from '../lib/data/countries'
 import { stories } from '../lib/data/stories'
 import { campaigns } from '../lib/data/campaigns'
 
 async function seed() {
+  const { getPayload } = await import('payload')
+  const config = (await import('@payload-config')).default
   const payload = await getPayload({ config })
 
   console.log('Seeding programs...')
   const programDocs: Record<string, string> = {}
   for (const program of programs) {
-    const doc = await payload.create({
+    const existing = await payload.find({
       collection: 'programs',
-      data: {
-        title: program.title,
-        slug: program.slug,
-        description: program.description,
-        longDescription: program.longDescription,
-        icon: program.icon,
-        stats: program.stats,
-        impactItems: program.impactItems.map((item) => ({ item })),
-        donationTiers: program.donationTiers,
-      },
+      where: { slug: { equals: program.slug } },
+      limit: 1,
     })
-    programDocs[program.slug] = doc.id as string
-    console.log(`  Created: ${program.title}`)
+
+    const programData = {
+      title: program.title,
+      slug: program.slug,
+      description: program.description,
+      longDescription: program.longDescription,
+      icon: program.icon,
+      stats: program.stats,
+      impactItems: program.impactItems.map((item) => ({ item })),
+      donationTiers: program.donationTiers,
+    }
+
+    if (existing.docs.length > 0) {
+      const doc = await payload.update({
+        collection: 'programs',
+        id: existing.docs[0].id,
+        data: programData,
+      })
+      programDocs[program.slug] = doc.id as string
+      console.log(`  Updated: ${program.title}`)
+    } else {
+      const doc = await payload.create({
+        collection: 'programs',
+        data: programData,
+      })
+      programDocs[program.slug] = doc.id as string
+      console.log(`  Created: ${program.title}`)
+    }
   }
 
   console.log('Seeding countries...')
@@ -35,19 +66,37 @@ async function seed() {
       .map((slug) => programDocs[slug])
       .filter(Boolean)
 
-    const doc = await payload.create({
+    const existing = await payload.find({
       collection: 'countries',
-      data: {
-        name: country.name,
-        slug: country.slug,
-        description: country.description,
-        impact: country.impact,
-        programs: programIds,
-        coordinates: country.coordinates,
-      },
+      where: { slug: { equals: country.slug } },
+      limit: 1,
     })
-    countryDocs[country.slug] = doc.id as string
-    console.log(`  Created: ${country.name}`)
+
+    const countryData = {
+      name: country.name,
+      slug: country.slug,
+      description: country.description,
+      impact: country.impact,
+      programs: programIds,
+      coordinates: country.coordinates,
+    }
+
+    if (existing.docs.length > 0) {
+      const doc = await payload.update({
+        collection: 'countries',
+        id: existing.docs[0].id,
+        data: countryData,
+      })
+      countryDocs[country.slug] = doc.id as string
+      console.log(`  Updated: ${country.name}`)
+    } else {
+      const doc = await payload.create({
+        collection: 'countries',
+        data: countryData,
+      })
+      countryDocs[country.slug] = doc.id as string
+      console.log(`  Created: ${country.name}`)
+    }
   }
 
   console.log('Seeding stories...')
@@ -56,63 +105,98 @@ async function seed() {
     const countryId = countryDocs[story.country]
     const programId = programDocs[story.program]
 
-    const doc = await payload.create({
+    const existing = await payload.find({
       collection: 'stories',
-      data: {
-        title: story.title,
-        slug: story.slug,
-        excerpt: story.excerpt,
-        body: {
-          root: {
-            type: 'root',
-            children: story.body.map((paragraph) => ({
-              type: 'paragraph',
-              children: [{ type: 'text', text: paragraph }],
-              direction: 'ltr',
-              format: '',
-              indent: 0,
-              version: 1,
-            })),
-            direction: 'ltr',
-            format: '',
+      where: { slug: { equals: story.slug } },
+      limit: 1,
+    })
+
+    const storyData = {
+      title: story.title,
+      slug: story.slug,
+      excerpt: story.excerpt,
+      body: {
+        root: {
+          type: 'root',
+          children: story.body.map((paragraph) => ({
+            type: 'paragraph',
+            children: [{ type: 'text', text: paragraph }],
+            direction: 'ltr' as const,
+            format: '' as const,
             indent: 0,
             version: 1,
-          },
+          })),
+          direction: 'ltr' as const,
+          format: '' as const,
+          indent: 0,
+          version: 1,
         },
-        category: story.category,
-        country: countryId,
-        program: programId,
-        publishedAt: story.publishedAt,
       },
-    })
-    storyDocs[story.slug] = doc.id as string
-    console.log(`  Created: ${story.title}`)
+      category: story.category,
+      country: countryId,
+      program: programId,
+      publishedAt: story.publishedAt,
+    }
+
+    if (existing.docs.length > 0) {
+      const doc = await payload.update({
+        collection: 'stories',
+        id: existing.docs[0].id,
+        data: storyData,
+      })
+      storyDocs[story.slug] = doc.id as string
+      console.log(`  Updated: ${story.title}`)
+    } else {
+      const doc = await payload.create({
+        collection: 'stories',
+        data: storyData,
+      })
+      storyDocs[story.slug] = doc.id as string
+      console.log(`  Created: ${story.title}`)
+    }
   }
 
   console.log('Seeding campaigns...')
   for (const campaign of campaigns) {
     const programId = programDocs[campaign.program]
-    const storyId = storyDocs[campaign.storySlug]
+    const storyId = storyDocs[campaign.storySlug || '']
 
-    await payload.create({
+    const existing = await payload.find({
       collection: 'campaigns',
-      data: {
-        title: campaign.title,
-        slug: campaign.slug,
-        program: programId,
-        headline: campaign.headline,
-        problem: campaign.problem,
-        solution: campaign.solution,
-        impactItems: campaign.impactItems.map((item) => ({ item })),
-        donationTiers: campaign.donationTiers,
-        story: storyId,
-        seo: {
-          metaTitle: campaign.metaTitle,
-          metaDescription: campaign.metaDescription,
-        },
-      },
+      where: { slug: { equals: campaign.slug } },
+      limit: 1,
     })
-    console.log(`  Created: ${campaign.title}`)
+
+    const campaignData = {
+      title: campaign.title,
+      slug: campaign.slug,
+      program: programId,
+      headline: campaign.headline,
+      problem: campaign.problem,
+      solution: campaign.solution,
+      impactItems: campaign.impactItems.map((item) => ({ item })),
+      donationTiers: campaign.donationTiers,
+      story: storyId,
+      seo: {
+        metaTitle: campaign.metaTitle,
+        metaDescription: campaign.metaDescription,
+      },
+    }
+
+    if (existing.docs.length > 0) {
+      await payload.update({
+        collection: 'campaigns',
+        id: existing.docs[0].id,
+        data: campaignData,
+      })
+      console.log(`  Updated: ${campaign.title}`)
+    } else {
+      await payload.create({
+        collection: 'campaigns',
+        data: campaignData,
+      })
+      console.log(`  Created: ${campaign.title}`)
+    }
   }
 
   console.log('Seeding team members...')
@@ -126,11 +210,50 @@ async function seed() {
   ]
 
   for (const member of teamMembers) {
-    await payload.create({
+    const existing = await payload.find({
       collection: 'teamMembers',
-      data: member,
+      where: { name: { equals: member.name } },
+      limit: 1,
     })
-    console.log(`  Created: ${member.name}`)
+
+    if (existing.docs.length > 0) {
+      await payload.update({
+        collection: 'teamMembers',
+        id: existing.docs[0].id,
+        data: member,
+      })
+      console.log(`  Updated: ${member.name}`)
+    } else {
+      await payload.create({
+        collection: 'teamMembers',
+        data: member,
+      })
+      console.log(`  Created: ${member.name}`)
+    }
+  }
+
+  console.log('Seeding partners...')
+  const partners = [
+    { name: 'UNICEF Partner Network', order: 1 },
+    { name: 'Global Relief Initiative', order: 2 },
+    { name: 'Education For All Alliance', order: 3 },
+    { name: 'Community Health Aid', order: 4 },
+  ]
+
+  for (const partner of partners) {
+    const existing = await payload.find({
+      collection: 'partners',
+      where: { name: { equals: partner.name } },
+      limit: 1,
+    })
+
+    if (existing.docs.length === 0) {
+      await payload.create({
+        collection: 'partners',
+        data: partner,
+      })
+      console.log(`  Created: ${partner.name}`)
+    }
   }
 
   console.log('Seeding global settings...')
@@ -162,7 +285,7 @@ async function seed() {
       },
     },
   })
-  console.log('  Created global settings')
+  console.log('  Updated global settings')
 
   console.log('\nSeed complete!')
   process.exit(0)

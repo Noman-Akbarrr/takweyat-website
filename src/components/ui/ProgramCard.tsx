@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowRight, BookOpen, HeartPulse, Droplets, Scale, HandHeart } from "./Icons";
 
 type ProgramCardProps = {
   title: string;
@@ -10,6 +11,26 @@ type ProgramCardProps = {
   raised?: string;
 };
 
+function getProgramIcon(icon?: string) {
+  switch (icon?.toLowerCase()) {
+    case "education":
+    case "child education":
+      return <BookOpen className="w-5 h-5" />;
+    case "medical":
+    case "healthy life":
+    case "healthcare":
+      return <HeartPulse className="w-5 h-5" />;
+    case "pure water":
+    case "water":
+      return <Droplets className="w-5 h-5" />;
+    case "justice":
+    case "social justice":
+      return <Scale className="w-5 h-5" />;
+    default:
+      return <HandHeart className="w-5 h-5" />;
+  }
+}
+
 export function ProgramCard({
   title,
   description,
@@ -20,52 +41,50 @@ export function ProgramCard({
   raised,
 }: ProgramCardProps) {
   return (
-    <div className="causes-item flex flex-col bg-white border-t-5 border-t-primary rounded-t overflow-hidden h-full shadow-card">
-      <div className="text-center p-6 pt-0">
+    <div className="flex flex-col bg-surface rounded-xl border-t-4 border-t-primary overflow-hidden h-full shadow-card hover:shadow-lg transition-all duration-300 border border-border-light group">
+      <div className="p-6 flex-1 flex flex-col">
         {icon && (
-          <div className="inline-block bg-primary text-white rounded-b-lg text-sm pb-1 px-3 mb-4">
-            <small>{icon}</small>
+          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary rounded-full text-xs font-semibold py-1 px-3 mb-4 w-fit">
+            {getProgramIcon(icon)}
+            <span>{icon}</span>
           </div>
         )}
-        <h5 className="mb-3 font-bold text-text-primary">{title}</h5>
-        <p className="text-text-secondary text-sm">{description}</p>
+        <h4 className="mb-3 font-bold text-xl text-text-primary group-hover:text-primary transition-colors">
+          {title}
+        </h4>
+        <p className="text-text-secondary text-sm leading-relaxed mb-6 flex-1">
+          {description}
+        </p>
+
         {(goal || raised) && (
-          <div className="causes-progress bg-surface-elevated p-3 pt-2 mt-4">
-            <div className="flex justify-content-between">
-              <p className="text-dark text-sm">
-                {raised} <small className="text-text-muted">Raised</small>
-              </p>
-              <p className="text-dark text-sm">
-                {goal} <small className="text-text-muted">Goal</small>
-              </p>
+          <div className="bg-surface-elevated rounded-lg p-4 mb-5 border border-border-light/60">
+            <div className="flex justify-between items-center text-sm font-medium mb-2">
+              <span className="text-text-primary">
+                {raised} <small className="text-text-muted font-normal">Raised</small>
+              </span>
+              <span className="text-text-primary">
+                {goal} <small className="text-text-muted font-normal">Goal</small>
+              </span>
             </div>
-            <div className="progress mt-2">
+            <div className="w-full bg-border-light h-2 rounded-full overflow-hidden">
               <div
-                className="progress-bar"
-                role="progressbar"
-                aria-valuenow={progress}
-                aria-valuemin={0}
-                aria-valuemax={100}
-                style={{ width: `${progress}%` }}
-              >
-                <span>{progress}%</span>
-              </div>
+                className="bg-primary h-full rounded-full transition-all duration-1000"
+                style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
+              />
+            </div>
+            <div className="text-right mt-1.5">
+              <span className="text-xs font-semibold text-primary">{progress}% Achieved</span>
             </div>
           </div>
         )}
-      </div>
-      <div className="relative mt-auto">
-        <div className="causes-overlay">
+
+        <div className="mt-auto pt-2">
           <Link
             href={href}
-            className="inline-flex items-center gap-2 border-2 border-white text-white px-5 py-2 rounded font-semibold hover:bg-white hover:text-primary transition-all"
+            className="inline-flex items-center justify-between w-full border border-primary/20 text-primary px-4 py-2.5 rounded-lg font-semibold text-sm hover:bg-primary hover:text-white transition-all group-hover:border-primary"
           >
-            Read More
-            <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white">
-              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </div>
+            <span>Learn More & Support</span>
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
       </div>

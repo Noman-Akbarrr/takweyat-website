@@ -170,21 +170,27 @@ body {
   opacity: 1;
 }
 
-/* Page header — ChariTeam style */
+/* Page header — modern humanitarian style with rich gradients and subtle pattern */
 .page-header {
-  padding-top: 10rem;
+  padding-top: 8rem;
   padding-bottom: 4rem;
-  background: linear-gradient(rgba(0, 29, 35, 0.8), rgba(0, 29, 35, 0.8)),
-    url(/images/hero-bg.jpg) center center no-repeat;
+  position: relative;
+  background: radial-gradient(circle at top right, rgba(20, 163, 168, 0.25), transparent 60%),
+              radial-gradient(circle at bottom left, rgba(13, 115, 119, 0.4), transparent 50%),
+              linear-gradient(135deg, #001d23 0%, #095456 100%);
   background-size: cover;
+  background-position: center;
 }
 
-/* Parallax section */
+/* Parallax section with rich fallback */
 .parallax-section {
-  background-attachment: fixed;
+  position: relative;
+  background-attachment: scroll;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  background: radial-gradient(circle at 80% 20%, rgba(232, 93, 38, 0.15), transparent 40%),
+              linear-gradient(135deg, #001d23 0%, #0d7377 100%);
 }
 
 /* Animate on scroll helper */

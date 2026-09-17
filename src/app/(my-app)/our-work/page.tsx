@@ -1,15 +1,17 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { Container, Section, SectionHeading, ProgramCard, DonationCTA } from "@/components/ui";
-import { programs } from "@/lib/data/programs";
+import { getPrograms } from "@/lib/cms";
 import { generateBreadcrumbSchema } from "@/lib/seo/schema";
 
 export const metadata: Metadata = {
   title: "Our Work",
-  description: "Discover our six core programs: Education, Financial Support, Social Justice, Medical Aid, Hunger Relief, and Orphan & Widow Assistance.",
+  description: "Discover our core humanitarian programs: Education, Financial Livelihoods, Social Justice, Medical Aid, Hunger Relief, and Emergency Assistance.",
 };
 
-export default function OurWorkPage() {
+export default async function OurWorkPage() {
+  const programs = await getPrograms();
+
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: "Home", url: "/" },
     { name: "Our Work", url: "/our-work" },
@@ -47,8 +49,8 @@ export default function OurWorkPage() {
         <Container>
           <SectionHeading
             badge="Our Programs"
-            title="Creating Lasting Change Across Six Core Programs"
-            subtitle="From education to emergency relief, we work across six core programs to create lasting change in communities around the world."
+            title="Creating Lasting Change Across Core Programs"
+            subtitle="From primary education to emergency disaster relief, we partner directly with communities to build sustainable futures."
           />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {programs.map((program) => (
@@ -58,6 +60,9 @@ export default function OurWorkPage() {
                 description={program.description}
                 href={`/our-work/${program.slug}`}
                 icon={program.icon}
+                progress={80}
+                goal="$10,000"
+                raised="$8,000"
               />
             ))}
           </div>

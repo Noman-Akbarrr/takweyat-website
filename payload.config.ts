@@ -1,6 +1,7 @@
 import { buildConfig } from 'payload'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import sharp from 'sharp'
 
 import { Programs } from './src/collections/Programs'
@@ -12,6 +13,9 @@ import { Partners } from './src/collections/Partners'
 import { Media } from './src/collections/Media'
 import { Users } from './src/collections/Users'
 import { GlobalSettings } from './src/globals/GlobalSettings'
+
+const dbUrl = process.env.DATABASE_URL || ''
+const isPostgres = dbUrl.startsWith('postgres://') || dbUrl.startsWith('postgresql://')
 
 export default buildConfig({
   admin: {
@@ -33,10 +37,16 @@ export default buildConfig({
   typescript: {
     outputFile: 'payload-types.ts',
   },
-  db: postgresAdapter({
-    pool: {
-      connectionString: process.env.DATABASE_URL || '',
-    },
-  }),
+  db: isPostgres
+    ? postgresAdapter({
+        pool: {
+          connectionString: dbUrl,
+        },
+      })
+    : sqliteAdapter({
+        client: {
+          url: dbUrl.startsWith('file:') || dbUrl.startsWith('sqlite:') ? dbUrl : 'file:./payload.db',
+        },
+      }),
   sharp,
 })

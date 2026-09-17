@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container, Section, SectionHeading, DonationCTA } from "@/components/ui";
-import { getStoryBySlug, stories } from "@/lib/data/stories";
+import { getStoryBySlug, getStories } from "@/lib/cms";
 import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/seo/schema";
 
 type Props = {
@@ -10,12 +10,13 @@ type Props = {
 };
 
 export async function generateStaticParams() {
+  const stories = await getStories();
   return stories.map((story) => ({ slug: story.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const story = getStoryBySlug(slug);
+  const story = await getStoryBySlug(slug);
   if (!story) return { title: "Story Not Found" };
 
   return {
@@ -26,7 +27,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function StoryPage({ params }: Props) {
   const { slug } = await params;
-  const story = getStoryBySlug(slug);
+  const [story, allStories] = await Promise.all([
+    getStoryBySlug(slug),
+    getStories(),
+  ]);
 
   if (!story) {
     notFound();
@@ -131,7 +135,7 @@ export default async function StoryPage({ params }: Props) {
             title="Read More From The Field"
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {stories
+            {allStories
               .filter((s) => s.slug !== story.slug)
               .slice(0, 3)
               .map((s) => (

@@ -2,8 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container, Section, SectionHeading, StatsCounter, DonationCTA, ProgramCard } from "@/components/ui";
-import { getCountryBySlug, countries } from "@/lib/data/countries";
-import { programs } from "@/lib/data/programs";
+import { getCountryBySlug, getCountries, getPrograms } from "@/lib/cms";
 import { generateCountrySchema, generateBreadcrumbSchema } from "@/lib/seo/schema";
 
 type Props = {
@@ -11,12 +10,13 @@ type Props = {
 };
 
 export async function generateStaticParams() {
+  const countries = await getCountries();
   return countries.map((country) => ({ slug: country.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const country = getCountryBySlug(slug);
+  const country = await getCountryBySlug(slug);
   if (!country) return { title: "Country Not Found" };
 
   return {
@@ -27,13 +27,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CountryPage({ params }: Props) {
   const { slug } = await params;
-  const country = getCountryBySlug(slug);
+  const [country, allCountries, allPrograms] = await Promise.all([
+    getCountryBySlug(slug),
+    getCountries(),
+    getPrograms(),
+  ]);
 
   if (!country) {
     notFound();
   }
 
-  const countryPrograms = programs.filter((p) =>
+  const countryPrograms = allPrograms.filter((p) =>
     country && country.programs.includes(p.slug)
   );
 
@@ -148,7 +152,7 @@ export default async function CountryPage({ params }: Props) {
             title="Other Countries"
           />
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {countries
+            {allCountries
               .filter((c) => c.slug !== country.slug)
               .slice(0, 4)
               .map((c) => (

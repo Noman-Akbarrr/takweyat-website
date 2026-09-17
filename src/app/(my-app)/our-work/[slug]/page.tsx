@@ -2,8 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container, Section, SectionHeading, StatsCounter, DonationCTA } from "@/components/ui";
-import { getProgramBySlug, programs } from "@/lib/data/programs";
-import { countries } from "@/lib/data/countries";
+import { getProgramBySlug, getPrograms, getCountries } from "@/lib/cms";
 import { generateProgramSchema, generateBreadcrumbSchema } from "@/lib/seo/schema";
 
 type Props = {
@@ -11,12 +10,13 @@ type Props = {
 };
 
 export async function generateStaticParams() {
+  const programs = await getPrograms();
   return programs.map((program) => ({ slug: program.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const program = getProgramBySlug(slug);
+  const program = await getProgramBySlug(slug);
   if (!program) return { title: "Program Not Found" };
 
   return {
@@ -27,13 +27,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProgramPage({ params }: Props) {
   const { slug } = await params;
-  const program = getProgramBySlug(slug);
+  const [program, allCountries] = await Promise.all([
+    getProgramBySlug(slug),
+    getCountries(),
+  ]);
 
   if (!program) {
     notFound();
   }
 
-  const programCountries = countries.filter((c) =>
+  const programCountries = allCountries.filter((c) =>
     program && c.programs.includes(program.slug)
   );
 

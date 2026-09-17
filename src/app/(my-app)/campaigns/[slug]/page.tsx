@@ -2,20 +2,20 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container, Section, SectionHeading } from "@/components/ui";
-import { getCampaignBySlug, campaigns } from "@/lib/data/campaigns";
-import { getStoryBySlug } from "@/lib/data/stories";
+import { getCampaignBySlug, getCampaigns, getStoryBySlug } from "@/lib/cms";
 
 type Props = {
   params: Promise<{ slug: string }>;
 };
 
 export async function generateStaticParams() {
+  const campaigns = await getCampaigns();
   return campaigns.map((campaign) => ({ slug: campaign.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const campaign = getCampaignBySlug(slug);
+  const campaign = await getCampaignBySlug(slug);
   if (!campaign) return { title: "Campaign Not Found" };
 
   return {
@@ -26,13 +26,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CampaignPage({ params }: Props) {
   const { slug } = await params;
-  const campaign = getCampaignBySlug(slug);
+  const campaign = await getCampaignBySlug(slug);
 
   if (!campaign) {
     notFound();
   }
 
-  const story = campaign.storySlug ? getStoryBySlug(campaign.storySlug) : null;
+  const story = campaign.storySlug ? await getStoryBySlug(campaign.storySlug) : null;
 
   return (
     <>
