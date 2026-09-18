@@ -1,4 +1,10 @@
-import { client, isSanityConfigured } from './sanity.client'
+import { client, isSanityConfigured, urlFor } from './sanity.client'
+
+function resolveImage(image: any): string | null {
+  if (!image) return null
+  if (typeof image === 'string') return image
+  try { return urlFor(image).width(1200).height(675).fit('crop').url() } catch { return null }
+}
 
 async function safeFetch<T>(query: string, params?: Record<string, any>, fallback: T | null = null): Promise<T | null> {
   if (!isSanityConfigured) return fallback
@@ -41,7 +47,7 @@ export type TeamMember = { _id: string; name: string; role: string; bio?: string
 export type Partner = { _id: string; name: string; url?: string; logo?: string | null; category?: string }
 
 export type GlobalSettingsData = {
-  siteName: string; siteDescription: string
+  siteName: string; siteDescription: string; logo?: string | null
   contactInfo: { address: string; email: string; phone: string }
   socialLinks: Array<{ platform: string; url: string }>
   impactStats: {
@@ -64,11 +70,12 @@ function mapSlug(val: any): string {
 }
 
 export async function getGlobalSettings(): Promise<GlobalSettingsData> {
-  const query = `*[_type == "globalSettings"][0] { siteName, siteDescription, contactInfo, socialLinks, impactStats }`
-  const result = await safeFetch<GlobalSettingsData>(query)
-  return result ?? {
+  const query = `*[_type == "globalSettings"][0] { siteName, siteDescription, logo, contactInfo, socialLinks, impactStats }`
+  const result = await safeFetch<any>(query)
+  const fallback = {
     siteName: 'Takweyat Foundation',
     siteDescription: 'Working across 5 countries to provide education, food, healthcare, and hope where it is needed most.',
+    logo: null as string | null,
     contactInfo: { address: 'Main G.T. Road, Rawalpindi, Pakistan', email: 'info@takweyat.org', phone: '+92 314 5217958' },
     socialLinks: [
       { platform: 'Facebook', url: 'https://www.facebook.com/share/18W5ghRAB6/' },
@@ -78,6 +85,8 @@ export async function getGlobalSettings(): Promise<GlobalSettingsData> {
     ],
     impactStats: { countries: 5, projects: 215, peopleReached: 46000, communities: 93, childrenEducated: 500, hotMealsDistributed: 1000, legalServicesProvided: 50, rationPackagesDistributed: 200 },
   }
+  if (!result) return fallback
+  return { ...result, logo: resolveImage(result.logo) }
 }
 
 export async function getPrograms(): Promise<Program[]> {
@@ -87,7 +96,7 @@ export async function getPrograms(): Promise<Program[]> {
     longDescription: doc.longDescription || doc.description, icon: doc.icon || '📚',
     stats: doc.stats || { number: 0, label: 'Served' },
     impactItems: (doc.impactItems || []).map((i: any) => i.item ?? i),
-    donationTiers: doc.donationTiers || [], heroImage: doc.heroImage || null,
+    donationTiers: doc.donationTiers || [], heroImage: resolveImage(doc.heroImage),
   }))
 }
 
@@ -99,7 +108,7 @@ export async function getProgramBySlug(slug: string): Promise<Program | null> {
     longDescription: raw.longDescription || raw.description, icon: raw.icon || '📚',
     stats: raw.stats || { number: 0, label: 'Served' },
     impactItems: (raw.impactItems || []).map((i: any) => i.item ?? i),
-    donationTiers: raw.donationTiers || [], heroImage: raw.heroImage || null,
+    donationTiers: raw.donationTiers || [], heroImage: resolveImage(raw.heroImage),
   }
 }
 
@@ -114,7 +123,7 @@ export async function getCountries(): Promise<Country[]> {
     _id: doc._id, name: doc.name, slug: mapSlug(doc.slug), description: doc.description,
     impact: doc.impact || { people: 0, projects: 0, communities: 0 },
     programs: (doc.programs || []).map((p: any) => mapSlug(p)),
-    coordinates: doc.coordinates, heroImage: doc.heroImage || null,
+    coordinates: doc.coordinates, heroImage: resolveImage(doc.heroImage),
   }))
 }
 
@@ -125,7 +134,7 @@ export async function getCountryBySlug(slug: string): Promise<Country | null> {
     _id: raw._id, name: raw.name, slug: mapSlug(raw.slug), description: raw.description,
     impact: raw.impact || { people: 0, projects: 0, communities: 0 },
     programs: (raw.programs || []).map((p: any) => mapSlug(p)),
-    coordinates: raw.coordinates, heroImage: raw.heroImage || null,
+    coordinates: raw.coordinates, heroImage: resolveImage(raw.heroImage),
   }
 }
 
@@ -144,7 +153,7 @@ export async function getStories(): Promise<Story[]> {
       _id: doc._id, title: doc.title, slug: mapSlug(doc.slug), excerpt: doc.excerpt, body: bodyText,
       category: doc.category, country: doc.countryName || doc.country || '', program: doc.program || '',
       publishedAt: doc.publishedAt ? new Date(doc.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '',
-      heroImage: doc.heroImage || null,
+      heroImage: resolveImage(doc.heroImage),
     }
   })
 }
@@ -159,7 +168,7 @@ export async function getStoryBySlug(slug: string): Promise<Story | null> {
     _id: raw._id, title: raw.title, slug: mapSlug(raw.slug), excerpt: raw.excerpt, body: bodyText,
     category: raw.category, country: raw.countryName || raw.country || '', program: raw.program || '',
     publishedAt: raw.publishedAt ? new Date(raw.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '',
-    heroImage: raw.heroImage || null,
+    heroImage: resolveImage(raw.heroImage),
   }
 }
 
@@ -172,7 +181,7 @@ export async function getStoriesByProgram(programSlug: string): Promise<Story[]>
   const raw = await safeFetchAll<any>(`*[_type == "story" && program->slug.current == $programSlug] | order(publishedAt desc) { ${STORY_FIELDS} }`, { programSlug })
   return raw.map((doc) => {
     const bodyText = Array.isArray(doc.body) ? doc.body.filter((b: any) => b._type === 'block').map((b: any) => b.children?.filter((c: any) => c._type === 'text').map((c: any) => c.text).join('') ?? '').filter(Boolean) : []
-    return { _id: doc._id, title: doc.title, slug: mapSlug(doc.slug), excerpt: doc.excerpt, body: bodyText, category: doc.category, country: doc.countryName || '', program: doc.program || '', publishedAt: doc.publishedAt ? new Date(doc.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '', heroImage: doc.heroImage || null }
+    return { _id: doc._id, title: doc.title, slug: mapSlug(doc.slug), excerpt: doc.excerpt, body: bodyText, category: doc.category, country: doc.countryName || '', program: doc.program || '', publishedAt: doc.publishedAt ? new Date(doc.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '', heroImage: resolveImage(doc.heroImage) }
   })
 }
 
@@ -180,7 +189,7 @@ export async function getStoriesByCountry(countrySlug: string): Promise<Story[]>
   const raw = await safeFetchAll<any>(`*[_type == "story" && country->slug.current == $countrySlug] | order(publishedAt desc) { ${STORY_FIELDS} }`, { countrySlug })
   return raw.map((doc) => {
     const bodyText = Array.isArray(doc.body) ? doc.body.filter((b: any) => b._type === 'block').map((b: any) => b.children?.filter((c: any) => c._type === 'text').map((c: any) => c.text).join('') ?? '').filter(Boolean) : []
-    return { _id: doc._id, title: doc.title, slug: mapSlug(doc.slug), excerpt: doc.excerpt, body: bodyText, category: doc.category, country: doc.countryName || '', program: doc.program || '', publishedAt: doc.publishedAt ? new Date(doc.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '', heroImage: doc.heroImage || null }
+    return { _id: doc._id, title: doc.title, slug: mapSlug(doc.slug), excerpt: doc.excerpt, body: bodyText, category: doc.category, country: doc.countryName || '', program: doc.program || '', publishedAt: doc.publishedAt ? new Date(doc.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '', heroImage: resolveImage(doc.heroImage) }
   })
 }
 
@@ -192,7 +201,7 @@ export async function getCampaigns(): Promise<Campaign[]> {
     impactItems: (doc.impactItems || []).map((i: any) => i.item ?? i),
     donationTiers: doc.donationTiers || [], storySlug: doc.storySlug,
     metaTitle: doc.seo?.metaTitle || doc.title, metaDescription: doc.seo?.metaDescription || doc.headline,
-    heroImage: doc.heroImage || null,
+    heroImage: resolveImage(doc.heroImage),
   }))
 }
 
@@ -205,7 +214,7 @@ export async function getCampaignBySlug(slug: string): Promise<Campaign | null> 
     impactItems: (raw.impactItems || []).map((i: any) => i.item ?? i),
     donationTiers: raw.donationTiers || [], storySlug: raw.storySlug,
     metaTitle: raw.seo?.metaTitle || raw.title, metaDescription: raw.seo?.metaDescription || raw.headline,
-    heroImage: raw.heroImage || null,
+    heroImage: resolveImage(raw.heroImage),
   }
 }
 
@@ -226,7 +235,7 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
       { _id: '6', name: 'Maryam Bibi', role: 'Country Director - Pakistan', bio: 'Directing provincial field coordinators, free medical camps, and flood relief operations.' },
     ]
   }
-  return raw.map((doc) => ({ _id: doc._id, name: doc.name, role: doc.role, bio: doc.bio || '', image: doc.image || undefined }))
+  return raw.map((doc) => ({ _id: doc._id, name: doc.name, role: doc.role, bio: doc.bio || '', image: resolveImage(doc.image) || undefined }))
 }
 
 export async function getPartners(): Promise<Partner[]> {
@@ -243,5 +252,5 @@ export async function getPartners(): Promise<Partner[]> {
       { _id: '8', name: 'Civil Society Foundation', category: 'Legal Advocacy' },
     ]
   }
-  return raw.map((doc) => ({ _id: doc._id, name: doc.name, url: doc.url || '#', logo: doc.logo || null, category: doc.category }))
+  return raw.map((doc) => ({ _id: doc._id, name: doc.name, url: doc.url || '#', logo: resolveImage(doc.logo), category: doc.category }))
 }

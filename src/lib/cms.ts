@@ -26,3 +26,5 @@ export {
   type Partner,
   type GlobalSettingsData,
 } from '@/sanity/sanity.utils'
+
+export { urlFor } from '@/sanity/sanity.client'
