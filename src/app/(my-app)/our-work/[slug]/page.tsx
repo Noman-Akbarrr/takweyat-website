@@ -151,7 +151,7 @@ export default async function ProgramPage({ params }: Props) {
               {programCountries.map((country) => (
                 <Link
                   key={country.slug}
-                  href={`/where-we-work/${country.slug}`}
+                  href={`/our-impact`}
                   className="group flex flex-col items-center justify-center h-32 bg-surface-elevated rounded-xl hover:bg-primary/10 transition-colors border border-border-light"
                 >
                   <div className="w-3 h-3 bg-primary rounded-full mb-2 group-hover:scale-125 transition-transform" />

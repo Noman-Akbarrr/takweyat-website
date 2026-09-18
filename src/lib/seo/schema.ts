@@ -115,7 +115,7 @@ export function generateCountrySchema(country: {
     "@type": "Place",
     name: `${country.name} - Takweyat Foundation`,
     description: country.description,
-    url: `https://takweyat.org/where-we-work/${country.slug}`,
+    url: `https://takweyat.org/our-impact`,
     containedInPlace: {
       "@type": "Country",
       name: country.name,

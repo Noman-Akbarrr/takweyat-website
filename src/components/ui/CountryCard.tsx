@@ -12,7 +12,7 @@ type CountryCardProps = {
 export function CountryCard({ name, slug, description, imageUrl }: CountryCardProps) {
   return (
     <Link
-      href={`/where-we-work/${slug}`}
+      href={`/our-impact`}
       className="group relative block h-64 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-border-light"
     >
       {/* Background */}

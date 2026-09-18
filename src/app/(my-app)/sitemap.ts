@@ -6,9 +6,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages = [
     { url: BASE_URL, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 1 },
     { url: `${BASE_URL}/our-work`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.9 },
-    { url: `${BASE_URL}/where-we-work`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.9 },
     { url: `${BASE_URL}/our-impact`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.9 },
-    { url: `${BASE_URL}/our-impact/reports`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.7 },
     { url: `${BASE_URL}/stories`, lastModified: new Date(), changeFrequency: "weekly" as const, priority: 0.8 },
     { url: `${BASE_URL}/get-involved`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.8 },
     { url: `${BASE_URL}/get-involved/donate`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.9 },
@@ -29,14 +27,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "medical-aid-healthcare",
     "hunger-relief-food-distribution",
     "orphan-widow-assistance",
-  ];
-
-  const countries = [
-    "pakistan",
-    "palestine",
-    "sudan",
-    "uk",
-    "norway",
   ];
 
   const campaigns = [
@@ -64,13 +54,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  const countryPages = countries.map((slug) => ({
-    url: `${BASE_URL}/where-we-work/${slug}`,
-    lastModified: new Date(),
-    changeFrequency: "monthly" as const,
-    priority: 0.8,
-  }));
-
   const campaignPages = campaigns.map((slug) => ({
     url: `${BASE_URL}/campaigns/${slug}`,
     lastModified: new Date(),
@@ -88,7 +71,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...staticPages,
     ...programPages,
-    ...countryPages,
     ...campaignPages,
     ...storyPages,
   ];

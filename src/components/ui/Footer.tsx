@@ -21,10 +21,7 @@ const footerLinks = {
     { name: "Social Justice & Legal Aid", href: "/our-work/social-justice-advocacy" },
   ],
   "Where We Work": [
-    { name: "Pakistan", href: "/where-we-work/pakistan" },
-    { name: "Palestine", href: "/where-we-work/palestine" },
-    { name: "Sudan", href: "/where-we-work/sudan" },
-    { name: "All Countries", href: "/where-we-work" },
+    { name: "Our Impact", href: "/our-impact" },
   ],
   "Get Involved": [
     { name: "Donate Now", href: "/get-involved/donate" },

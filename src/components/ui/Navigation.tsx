@@ -25,10 +25,8 @@ const navigation = [
   {
     name: "Pages",
     children: [
-      { name: "Where We Work", href: "/where-we-work" },
       { name: "Our Impact", href: "/our-impact" },
       { name: "Stories of Hope", href: "/stories" },
-      { name: "Impact Reports", href: "/our-impact/reports" },
     ],
   },
   { name: "Contact", href: "/contact" },
