@@ -28,6 +28,25 @@ export default defineType({
       }],
     }),
     defineField({
+      name: 'heroSlides', title: 'Hero Slides', type: 'array',
+      description: 'Slides shown in the homepage hero carousel',
+      of: [{
+        type: 'object',
+        fields: [
+          defineField({ name: 'title', title: 'Title', type: 'string', validation: (r) => r.required() }),
+          defineField({ name: 'subtitle', title: 'Subtitle', type: 'string' }),
+          defineField({ name: 'description', title: 'Description', type: 'text' }),
+          defineField({ name: 'href', title: 'Button Link', type: 'string', initialValue: '/our-work' }),
+          defineField({ name: 'hrefText', title: 'Button Text', type: 'string', initialValue: 'Learn More' }),
+          defineField({ name: 'backgroundImage', title: 'Background Image', type: 'image', options: { hotspot: true } }),
+        ],
+        preview: {
+          select: { title: 'title', subtitle: 'subtitle' },
+          prepare(s) { return { title: s.title, subtitle: s.subtitle } },
+        },
+      }],
+    }),
+    defineField({
       name: 'impactStats', title: 'Impact Stats', type: 'object',
       fields: [
         defineField({ name: 'countries', title: 'Countries', type: 'number', initialValue: 5 }),

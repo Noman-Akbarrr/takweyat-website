@@ -50,6 +50,10 @@ export type GlobalSettingsData = {
   siteName: string; siteDescription: string; logo?: string | null
   contactInfo: { address: string; email: string; phone: string }
   socialLinks: Array<{ platform: string; url: string }>
+  heroSlides?: Array<{
+    title: string; subtitle?: string; description?: string
+    href?: string; hrefText?: string; backgroundImage?: string | null
+  }>
   impactStats: {
     countries: number; projects: number; peopleReached: number; communities: number
     childrenEducated: number; hotMealsDistributed: number; legalServicesProvided: number; rationPackagesDistributed: number
@@ -70,7 +74,7 @@ function mapSlug(val: any): string {
 }
 
 export async function getGlobalSettings(): Promise<GlobalSettingsData> {
-  const query = `*[_type == "globalSettings"][0] { siteName, siteDescription, logo, contactInfo, socialLinks, impactStats }`
+  const query = `*[_type == "globalSettings"][0] { siteName, siteDescription, logo, contactInfo, socialLinks, heroSlides[]{ title, subtitle, description, href, hrefText, backgroundImage }, impactStats }`
   const result = await safeFetch<any>(query)
   const fallback = {
     siteName: 'Takweyat Foundation',
@@ -83,10 +87,16 @@ export async function getGlobalSettings(): Promise<GlobalSettingsData> {
       { platform: 'LinkedIn', url: 'https://www.linkedin.com/company/takweyat-foundation/' },
       { platform: 'Instagram', url: 'https://www.instagram.com/takweyat' },
     ],
+    heroSlides: [] as GlobalSettingsData['heroSlides'],
     impactStats: { countries: 5, projects: 215, peopleReached: 46000, communities: 93, childrenEducated: 500, hotMealsDistributed: 1000, legalServicesProvided: 50, rationPackagesDistributed: 200 },
   }
   if (!result) return fallback
-  return { ...result, logo: resolveImage(result.logo) }
+  const slides = (result.heroSlides || []).map((s: any) => ({
+    title: s.title, subtitle: s.subtitle || '', description: s.description || '',
+    href: s.href || '/our-work', hrefText: s.hrefText || 'Learn More',
+    backgroundImage: resolveImage(s.backgroundImage),
+  }))
+  return { ...result, logo: resolveImage(result.logo), heroSlides: slides }
 }
 
 export async function getPrograms(): Promise<Program[]> {

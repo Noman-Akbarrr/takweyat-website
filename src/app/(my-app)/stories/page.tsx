@@ -61,6 +61,7 @@ export default async function StoriesPage() {
                 slug={story.slug}
                 category={story.category}
                 date={story.publishedAt}
+                imageUrl={story.heroImage || undefined}
               />
             ))}
           </div>

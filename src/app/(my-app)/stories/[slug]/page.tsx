@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Container, Section, SectionHeading, DonationCTA } from "@/components/ui";
 import { getStoryBySlug, getStories } from "@/lib/cms";
@@ -92,10 +93,23 @@ export default async function StoryPage({ params }: Props) {
       <Section className="py-20">
         <Container>
           <article className="max-w-3xl mx-auto">
-            {/* Featured Image Placeholder */}
-            <div className="aspect-[16/9] bg-surface-elevated rounded-xl mb-12 flex items-center justify-center">
-              <span className="text-text-muted text-sm">Featured Image</span>
-            </div>
+            {/* Featured Image */}
+            {story.heroImage ? (
+              <div className="relative aspect-[16/9] rounded-xl mb-12 overflow-hidden">
+                <Image
+                  src={story.heroImage}
+                  alt={story.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 768px"
+                  priority
+                />
+              </div>
+            ) : (
+              <div className="aspect-[16/9] bg-gradient-to-br from-primary-dark/80 via-primary to-primary-light/70 rounded-xl mb-12 flex items-center justify-center">
+                <span className="text-white/60 text-sm font-medium">{story.category}</span>
+              </div>
+            )}
 
             {/* Excerpt */}
             <p className="text-xl text-text-secondary leading-relaxed mb-8 font-medium border-l-4 border-primary pl-6">
@@ -144,7 +158,19 @@ export default async function StoryPage({ params }: Props) {
                   href={`/stories/${s.slug}`}
                   className="group bg-white rounded-xl overflow-hidden shadow-card hover:shadow-lg transition-all"
                 >
-                  <div className="aspect-[16/10] bg-surface-elevated" />
+                  {s.heroImage ? (
+                    <div className="relative aspect-[16/10] overflow-hidden">
+                      <Image
+                        src={s.heroImage}
+                        alt={s.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
+                    </div>
+                  ) : (
+                    <div className="aspect-[16/10] bg-gradient-to-br from-primary-dark/80 via-primary to-primary-light/70" />
+                  )}
                   <div className="p-6">
                     <span className="text-xs font-semibold text-primary uppercase tracking-wider">
                       {s.category}

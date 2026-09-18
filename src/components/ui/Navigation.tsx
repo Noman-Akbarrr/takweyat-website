@@ -79,7 +79,7 @@ export function Navigation() {
 
   const headerBgClass = !isHome || scrolled
     ? "bg-surface-dark/95 backdrop-blur-md shadow-lg border-b border-white/10"
-    : "bg-gradient-to-b from-surface-dark/90 to-transparent";
+    : "bg-surface-dark/90 backdrop-blur-md";
 
   return (
     <>

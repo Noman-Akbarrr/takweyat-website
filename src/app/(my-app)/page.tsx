@@ -64,7 +64,19 @@ export default async function Home() {
       />
 
       {/* Hero Carousel */}
-      <HeroCarousel />
+      <HeroCarousel slides={globalSettings?.heroSlides} />
+
+      {/* Live Stats Bar — immediately after hero */}
+      <Section className="py-14 bg-surface border-y border-border-light">
+        <Container>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <StatsCounter value={`${stats.childrenEducated}+`} label="Children Being Educated" />
+            <StatsCounter value={`${stats.legalServicesProvided}+`} label="Legal Aids Provided" />
+            <StatsCounter value={`${stats.rationPackagesDistributed}+`} label="Ration Packs Delivered" />
+            <StatsCounter value={`${stats.peopleReached ? (stats.peopleReached / 1000).toFixed(0) + 'K+' : '46K+'}`} label="Total Lives Reached" />
+          </div>
+        </Container>
+      </Section>
 
       {/* About Section */}
       <Section className="py-20">
@@ -199,19 +211,6 @@ export default async function Home() {
         </Container>
       </Section>
 
-      {/* Live Stats Bar */}
-      <Section className="py-14 bg-surface border-y border-border-light">
-        <Container>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-6 text-center">
-            <StatsCounter value={`${stats.childrenEducated}+`} label="Children Being Educated" />
-            <StatsCounter value={`${stats.hotMealsDistributed}+`} label="Hot Meals Distributed" />
-            <StatsCounter value={`${stats.legalServicesProvided}+`} label="Legal Aids Provided" />
-            <StatsCounter value={`${stats.rationPackagesDistributed}+`} label="Ration Packs Delivered" />
-            <StatsCounter value={`${stats.peopleReached ? (stats.peopleReached / 1000).toFixed(0) + 'K+' : '46K+'}`} label="Total Lives Reached" />
-          </div>
-        </Container>
-      </Section>
-
       {/* Donation CTA */}
       <section className="parallax-section py-20">
         <Container>
@@ -305,7 +304,15 @@ export default async function Home() {
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {featuredStories.map((story) => (
-              <StoryCard key={story.slug} {...story} />
+              <StoryCard
+                key={story.slug}
+                title={story.title}
+                excerpt={story.excerpt}
+                slug={story.slug}
+                category={story.category}
+                date={story.publishedAt}
+                imageUrl={story.heroImage || undefined}
+              />
             ))}
           </div>
         </Container>

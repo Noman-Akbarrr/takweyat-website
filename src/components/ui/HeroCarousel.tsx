@@ -2,10 +2,20 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Container } from "./Container";
 import { ChevronLeft, ChevronRight, ArrowRight, HandHeart } from "./Icons";
 
-const slides = [
+type HeroSlide = {
+  title: string;
+  subtitle?: string;
+  description?: string;
+  href?: string;
+  hrefText?: string;
+  backgroundImage?: string | null;
+};
+
+const defaultSlides: HeroSlide[] = [
   {
     title: "Empowering Lives with Hope and Dignity",
     subtitle: "Your Generosity Builds Their Future",
@@ -22,7 +32,12 @@ const slides = [
   },
 ];
 
-export function HeroCarousel() {
+type HeroCarouselProps = {
+  slides?: HeroSlide[];
+};
+
+export function HeroCarousel({ slides: cmsSlides }: HeroCarouselProps = {}) {
+  const slides = cmsSlides && cmsSlides.length > 0 ? cmsSlides : defaultSlides;
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
@@ -30,17 +45,44 @@ export function HeroCarousel() {
       setCurrent((prev) => (prev + 1) % slides.length);
     }, 7000);
     return () => clearInterval(timer);
-  }, []);
+  }, [slides.length]);
+
+  const activeSlide = slides[current];
 
   return (
     <section className="relative min-h-[82vh] flex items-center bg-surface-dark overflow-hidden">
-      {/* Background pattern & overlays */}
-      <div className="absolute inset-0 bg-[radial-gradient(#0d7377_1px,transparent_1px)] [background-size:24px_24px] opacity-20" />
-      <div className="absolute inset-0 bg-gradient-to-r from-surface-dark via-surface-dark/80 to-surface-dark/90" />
+      {/* Background Images */}
+      {slides.map((slide, index) => (
+        <div
+          key={index}
+          className={`absolute inset-0 transition-opacity duration-1000 ${
+            index === current ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          {slide.backgroundImage ? (
+            <Image
+              src={slide.backgroundImage}
+              alt={slide.title}
+              fill
+              className="object-cover"
+              priority={index === 0}
+              sizes="100vw"
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-surface-dark via-surface-dark to-primary-dark/30" />
+          )}
+        </div>
+      ))}
+
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-black/60 z-[1]" />
+
+      {/* Background pattern */}
+      <div className="absolute inset-0 bg-[radial-gradient(#0d7377_1px,transparent_1px)] [background-size:24px_24px] opacity-10 z-[2]" />
 
       {/* Slide Ambient Glow */}
-      <div className="absolute top-1/4 -left-20 w-96 h-96 bg-primary/20 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-10 right-10 w-96 h-96 bg-primary-light/15 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/4 -left-20 w-96 h-96 bg-primary/20 rounded-full blur-3xl pointer-events-none z-[2]" />
+      <div className="absolute bottom-10 right-10 w-96 h-96 bg-primary-light/15 rounded-full blur-3xl pointer-events-none z-[2]" />
 
       {/* Content */}
       <Container>
@@ -54,22 +96,26 @@ export function HeroCarousel() {
                   : "opacity-0 translate-y-6 absolute inset-0 pointer-events-none"
               }`}
             >
-              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md text-primary-light px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-6 border border-white/10">
-                <HandHeart className="w-4 h-4 text-action-light" />
-                <span>{slide.subtitle}</span>
-              </div>
+              {slide.subtitle && (
+                <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md text-primary-light px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-6 border border-white/10">
+                  <HandHeart className="w-4 h-4 text-action-light" />
+                  <span>{slide.subtitle}</span>
+                </div>
+              )}
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white mb-6 leading-tight tracking-tight">
                 {slide.title}
               </h1>
-              <p className="text-base sm:text-lg text-white/80 leading-relaxed max-w-2xl mb-8">
-                {slide.description}
-              </p>
+              {slide.description && (
+                <p className="text-base sm:text-lg text-white/80 leading-relaxed max-w-2xl mb-8">
+                  {slide.description}
+                </p>
+              )}
               <div className="flex flex-wrap gap-4">
                 <Link
-                  href={slide.href}
+                  href={slide.href || "/our-work"}
                   className="inline-flex items-center gap-2.5 bg-action text-white px-7 py-3.5 rounded-full font-bold text-sm hover:bg-action-dark transition-all shadow-lg hover:shadow-xl active:scale-95"
                 >
-                  <span>{slide.hrefText}</span>
+                  <span>{slide.hrefText || "Learn More"}</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link
