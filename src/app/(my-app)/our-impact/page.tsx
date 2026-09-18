@@ -1,8 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { Container, Section, SectionHeading, StatsCounter, DonationCTA } from "@/components/ui";
-import { countries } from "@/lib/data/countries";
-import { programs } from "@/lib/data/programs";
+import { getCountries, getPrograms } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: "Our Impact",
@@ -24,7 +23,8 @@ const detailedStats = [
   { value: "1,000+", label: "Patients Treated" },
 ];
 
-export default function ImpactPage() {
+export default async function ImpactPage() {
+  const [countries, programs] = await Promise.all([getCountries(), getPrograms()])
   return (
     <>
       {/* Page Header */}

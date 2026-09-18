@@ -22,18 +22,12 @@ ENV HOSTNAME 0.0.0.0
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copy standalone files to root
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
-
-# Also guarantee .next/standalone has full static and public subtrees for "node .next/standalone/server.js"
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./.next/standalone
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/standalone/.next/static
-COPY --from=builder --chown=nextjs:nodejs /app/public ./.next/standalone/public
 
 USER nextjs
 
 EXPOSE 3000
 
-CMD ["node", ".next/standalone/server.js"]
+CMD ["node", "server.js"]
