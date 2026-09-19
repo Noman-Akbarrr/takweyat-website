@@ -242,3 +242,21 @@ body {
 .animate-slide-in-down {
   animation: slideInDown 0.6s ease-out forwards;
 }
+
+@keyframes marqueeLeft {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-33.333%); }
+}
+
+@keyframes marqueeRight {
+  0% { transform: translateX(-33.333%); }
+  100% { transform: translateX(0); }
+}
+
+.animate-marquee-left {
+  animation: marqueeLeft 25s linear infinite;
+}
+
+.animate-marquee-right {
+  animation: marqueeRight 25s linear infinite;
+}
